@@ -48,8 +48,7 @@
         label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #4A4A4A; }
         .required::after { content: " *"; color: var(--brand-red); }
 
-        /* 使用 text type 搭配 inputmode 讓手機叫出數字鍵盤，又能顯示逗號 */
-        input[type="text"], input[type="number"], textarea, select {
+        input[type="text"], input[type="number"], input[type="tel"], textarea, select {
             width: 100%; padding: 14px 16px; border: 1.5px solid #E4E4E4;
             border-radius: var(--input-radius); font-size: 16px;
             transition: all 0.2s ease; color: var(--brand-dark); background-color: #FAFAFA;
@@ -62,6 +61,17 @@
         
         /* 防呆錯誤紅框 */
         .input-error { border-color: var(--brand-red) !important; background-color: #FFF0F0 !important; }
+
+        /* 動態新增按鈕列 */
+        .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
+        .btn-icon {
+            background-color: var(--brand-green); color: white; border: none;
+            border-radius: var(--input-radius); width: 48px; font-size: 24px; font-weight: bold;
+            cursor: pointer; display: flex; justify-content: center; align-items: center;
+            transition: 0.2s; flex-shrink: 0;
+        }
+        .btn-icon:active { transform: scale(0.95); }
+        .btn-icon.btn-remove { background-color: var(--brand-red); }
 
         .chip-group { display: flex; flex-wrap: wrap; gap: 10px; }
         .chip-group input[type="radio"], .chip-group input[type="checkbox"] { display: none; }
@@ -324,8 +334,19 @@
                 <div class="form-group"><label for="regReason">登記原因</label><input type="text" id="regReason"></div>
                 <div class="form-group"><label for="sellReason">售屋動機</label><input type="text" id="sellReason"></div>
                 <div class="form-group"><label for="meetPlace">約看地點</label><input type="text" id="meetPlace"></div>
-                <div class="form-group"><label class="required" for="developer">開發</label><input type="text" id="developer" class="req-input"></div>
-                <div class="form-group"><label class="required" for="phone">聯絡電話</label><input type="text" id="phone" class="req-input"></div>
+                
+                <div class="form-group" id="devContainer">
+                    <label class="required">開發</label>
+                    <div class="input-row">
+                        <input type="text" class="req-input dev-input" placeholder="開發人員 1">
+                        <button type="button" class="btn-icon" id="addDevBtn">+</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required" for="phone">聯絡電話</label>
+                    <input type="tel" id="phone" class="req-input" placeholder="09XX-XXX-XXX" maxlength="12">
+                </div>
             </div>
             <div class="form-group"><label for="memo">備註</label><textarea id="memo"></textarea></div>
             <div class="form-group"><label for="features">銷售重點及訴求重點</label><textarea id="features"></textarea></div>
@@ -437,7 +458,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-    // 儲存產生的 Blob 供預覽後下載用
     let currentImageBlob = null;
     let currentFileName = '';
 
@@ -450,7 +470,37 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // --- UX: 價格千分位逗號格式化 ---
+    // --- UX: 電話號碼自動格式化 (09XX-XXX-XXX) ---
+    document.getElementById('phone').addEventListener('input', function(e) {
+        // 移除非數字
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,4})(\d{0,3})(\d{0,3})/);
+        if (!x[1]) {
+            e.target.value = '';
+            return;
+        }
+        // 組裝格式
+        e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
+
+    // --- UX: 動態新增開發人員 ---
+    document.getElementById('addDevBtn').addEventListener('click', function() {
+        const container = document.getElementById('devContainer');
+        const rowCount = container.querySelectorAll('.input-row').length + 1;
+        
+        const row = document.createElement('div');
+        row.className = 'input-row';
+        row.innerHTML = `
+            <input type="text" class="dev-input" placeholder="開發人員 ${rowCount}">
+            <button type="button" class="btn-icon btn-remove">-</button>
+        `;
+        container.appendChild(row);
+        
+        row.querySelector('.btn-remove').addEventListener('click', function() {
+            row.remove();
+        });
+    });
+
+    // --- UX: 價格千分位逗號 ---
     function formatNumber(numStr) {
         if(!numStr) return '';
         let parts = numStr.toString().replace(/,/g, '').split('.');
@@ -458,11 +508,9 @@
         return parts.join('.');
     }
     document.querySelectorAll('.format-num').forEach(input => {
-        // 離開焦點時加上逗號
         input.addEventListener('blur', function() {
             if(!this.readOnly) this.value = formatNumber(this.value);
         });
-        // 點擊時移除逗號方便修改
         input.addEventListener('focus', function() {
             if(!this.readOnly) this.value = this.value.replace(/,/g, '');
         });
@@ -493,15 +541,15 @@
             if (checkedCount > 1 && !parkingWarned) {
                 const confirmMulti = confirm('⚠️ 提醒：車位類型通常只需選擇一種！\n\n請問您確定要選擇多個車位嗎？(點選確定後將不再提醒)');
                 if (confirmMulti) {
-                    parkingWarned = true; // 同事選了我知道，放行
+                    parkingWarned = true; 
                 } else {
-                    this.checked = false; // 取消剛勾的選項
+                    this.checked = false; 
                 }
             }
         });
     });
 
-    // --- UX: 瓦斯「其他」動態顯示輸入框 ---
+    // --- UX: 瓦斯「其他」動態輸入框 ---
     document.querySelectorAll('input[name="gas"]').forEach(radio => {
         radio.addEventListener('change', function() {
             const otherInput = document.getElementById('gasOtherText');
@@ -525,9 +573,8 @@
 
         if (hasError) {
             showToast('請檢查標示紅星號 (*) 的必填欄位', true);
-            // 畫面滾動到第一個未填欄位
             document.querySelector('.input-error').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return; // 終止產圖
+            return;
         }
 
         const btn = this;
@@ -542,14 +589,21 @@
             'price', 'acquirePrice', 'unitPrice', 'setPrice', 'marketPrice', 'bottomPrice',
             'totalArea', 'mainArea', 'subArea', 'indoorArea', 'publicArea', 'parkingArea', 'addArea', 'baseArea', 'landShare',
             'landNumber', 'publicRatio', 'widthDepth', 'roadWidth', 'builder', 'layout', 'floorHeight', 'buildDate', 'totalHouseholds', 'buildPlan', 'elevatorRatio', 'direction', 'communityName', 'managementCompany', 'managementFee', 'school',
-            'market', 'park', 'regDate', 'regReason', 'sellReason', 'meetPlace', 'developer', 'phone', 'memo', 'features'
+            'market', 'park', 'regDate', 'regReason', 'sellReason', 'meetPlace', 'phone', 'memo', 'features'
         ];
         
         textFields.forEach(id => {
             const el = document.getElementById(id);
             const outEl = document.getElementById('out_' + id);
-            if(el && outEl) outEl.innerText = el.value; // 價格已有逗號，直接搬過去
+            if(el && outEl) outEl.innerText = el.value; 
         });
+
+        // 處理多位開發人員
+        const devInputs = Array.from(document.querySelectorAll('.dev-input'))
+                               .map(input => input.value.trim())
+                               .filter(val => val !== '');
+        const devString = devInputs.join('、');
+        document.getElementById('out_developer').innerText = devString;
 
         // 寫入壓印日期與開發人
         const today = new Date();
@@ -557,7 +611,7 @@
         const mm = String(today.getMonth() + 1).padStart(2, '0');
         const dd = String(today.getDate()).padStart(2, '0');
         document.getElementById('out_metaDate').innerText = `${yyyy}/${mm}/${dd}`;
-        document.getElementById('out_metaDev').innerText = document.getElementById('developer').value;
+        document.getElementById('out_metaDev').innerText = devString;
 
         // 搬運單選與多選資料
         const radioGroups = ['type', 'status', 'registration', 'water'];
@@ -591,7 +645,6 @@
                 canvas.toBlob(function(blob) {
                     currentImageBlob = blob;
                     
-                    // 顯示預覽視窗
                     document.getElementById('previewImg').src = URL.createObjectURL(blob);
                     document.getElementById('previewModal').classList.add('show');
                     
@@ -634,7 +687,6 @@
         }
     });
 
-    // 點擊表單時取消紅框
     document.querySelectorAll('.req-input').forEach(input => {
         input.addEventListener('input', function() {
             this.classList.remove('input-error');
