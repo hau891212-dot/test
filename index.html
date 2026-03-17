@@ -112,8 +112,8 @@
         .other-text-input { display: none; margin-top: 12px; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .dev-phone-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
-        .dev-phone-row input { flex: 1; }
+        .dev-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
+        .dev-row input { flex: 1; }
         .btn-add-row {
             width: 100%; background: transparent; color: var(--brand-green);
             border: 2px dashed var(--brand-green); padding: 14px; font-size: 16px;
@@ -152,8 +152,8 @@
             background: var(--bg-color); padding: 20px; border-radius: 16px; width: 100%; max-width: 600px;
             max-height: 90vh; overflow-y: auto; text-align: center; position: relative;
         }
-        #previewImg { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 20px;}
-        .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+        #previewImg { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 10px;}
+        .modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .modal-actions .row-actions { display: flex; gap: 10px; }
         .modal-actions button { flex: 1; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .btn-copy { background: #1B9CFC; color: white; box-shadow: 0 4px 10px rgba(27, 156, 252, 0.3); }
@@ -395,6 +395,7 @@
                     <div class="form-group"><label for="market">鄰近市場</label><input type="text" id="market" placeholder="例：西平路商圈"></div>
                     <div class="form-group"><label for="park">鄰近公園</label><input type="text" id="park" placeholder="例：棒球場"></div>
                     <div class="form-group"><label for="sellReason">售屋動機</label><input type="text" id="sellReason" placeholder="例：換屋"></div>
+                    <div class="form-group"><label for="meetPlace">約看地點 (內部)</label><input type="text" id="meetPlace" placeholder="不出現在圖片"></div>
                 </div>
                 <div class="form-group"><label for="memo">備註</label><textarea id="memo" placeholder="例：看屋需提前一天"></textarea></div>
                 <div class="form-group"><label for="features">產品特色 (多行填寫)</label><textarea id="features" placeholder="1. 格局方正...&#10;2. 採光佳..."></textarea></div>
@@ -449,7 +450,7 @@
                     <div class="form-group"><label for="l_depth">深度約</label><input type="text" id="l_depth" placeholder="依地籍圖"></div>
                     <div class="form-group"><label for="l_road">臨路</label><input type="text" id="l_road" placeholder="例：6米"></div>
                     <div class="form-group"><label for="l_direction">座向</label><input type="text" id="l_direction" placeholder="例：朝南"></div>
-                    <div class="form-group"><label for="l_structure">地上物</label><input type="text" id="l_structure" placeholder="例：果樹"></div>
+                    <div class="form-group"><label for="l_structure">地上物</label><input type="text" id="l_structure" placeholder="例：無 / 果樹"></div>
                     <div class="form-group"><label for="l_rented">是否租借</label><input type="text" id="l_rented" placeholder="例：否"></div>
                     <div class="form-group"><label for="l_water">用水概況</label><input type="text" id="l_water" placeholder="例：地下水"></div>
                     <div class="form-group"><label for="l_electricity">用電概況</label><input type="text" id="l_electricity" placeholder="例：有"></div>
@@ -473,9 +474,7 @@
         <div class="card" id="internalSection" style="border-top: 4px solid var(--brand-red); display: none;">
             <h2 class="card-title">👤 內部專用資訊 (不會出現在圖片上)</h2>
             <div class="grid-2">
-                <div class="form-group"><label for="regDate">登記日期</label><input type="text" id="regDate" placeholder="例：115年03月05日"></div>
                 <div class="form-group"><label for="regReason">登記原因</label><input type="text" id="regReason" placeholder="例：買賣"></div>
-                <div class="form-group"><label for="meetPlace">約看地點</label><input type="text" id="meetPlace" placeholder="例：管理室"></div>
                 <div class="form-group"><label for="taxRate">房地合一稅</label><input type="text" id="taxRate" placeholder="例：45%"></div>
                 <div class="form-group"><label for="serviceFee">服務費</label><input type="text" id="serviceFee" placeholder="例：4%"></div>
                 <div class="form-group"><label for="middleFee">是否有中人費</label><input type="text" id="middleFee" placeholder="例：無"></div>
@@ -483,11 +482,10 @@
                 <div class="form-group"><label for="doorPassword">入戶密碼</label><input type="text" id="doorPassword" placeholder="例：123456#"></div>
             </div>
             
-            <h3 style="font-size: 15px; margin-top: 20px; border-top: 1px dashed #ddd; padding-top: 15px;">開發人員與聯絡電話</h3>
+            <h3 style="font-size: 15px; margin-top: 20px; border-top: 1px dashed #ddd; padding-top: 15px;">開發人員</h3>
             <div id="devList">
-                <div class="dev-phone-row">
-                    <input type="text" class="req-input dev-name" placeholder="開發姓名">
-                    <input type="tel" class="req-input dev-phone" placeholder="09XX-XXX-XXX" maxlength="12">
+                <div class="dev-row">
+                    <input type="text" class="req-input dev-name" placeholder="開發姓名 (例：小峰)">
                 </div>
             </div>
             <button type="button" class="btn-add-row" onclick="addDevRow()">＋ 新增開發人員</button>
@@ -505,6 +503,7 @@
         <h3 style="margin-bottom: 15px;">👀 請確認明細表內容</h3>
         <p style="font-size: 14px; color: #666; margin-top: -10px;">內部資訊（如底價/地建號/個資等）已自動隱藏</p>
         <img id="previewImg" src="" alt="預覽圖">
+        <p style="font-size: 13px; color: var(--brand-green); font-weight: bold; margin-bottom: 15px;">💡 提示：若點擊下方按鈕無反應(如 LINE 內建瀏覽器)，請直接長按上方圖片儲存。</p>
         
         <div class="modal-actions">
             <button class="btn-copy" id="copyTextBtn">📋 一鍵複製圖文文案</button>
@@ -691,29 +690,17 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // --- UX: 電話自動格式化 ---
-    function formatPhone(input) {
-        let x = input.value.replace(/\D/g, '').match(/(\d{0,4})(\d{0,3})(\d{0,3})/);
-        if (!x[1]) { input.value = ''; return; }
-        input.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
-    }
-
     // --- UX: 動態新增開發人員 ---
     function addDevRow() {
         const container = document.getElementById('devList');
         const row = document.createElement('div');
-        row.className = 'dev-phone-row';
+        row.className = 'dev-row';
         row.innerHTML = `
             <input type="text" class="req-input dev-name" placeholder="開發姓名">
-            <input type="tel" class="req-input dev-phone" placeholder="09XX-XXX-XXX" maxlength="12">
-            <button type="button" class="btn-remove-row" onclick="this.closest('.dev-phone-row').remove(); saveFormData();">✕</button>
+            <button type="button" class="btn-remove-row" onclick="this.closest('.dev-row').remove(); saveFormData();">✕</button>
         `;
         container.appendChild(row);
-        row.querySelector('.dev-phone').addEventListener('input', function() { formatPhone(this); });
     }
-
-    // 初始綁定預設的第一個電話欄位
-    document.querySelectorAll('.dev-phone').forEach(el => el.addEventListener('input', function(){ formatPhone(this); }));
 
     document.body.addEventListener('input', function(e) {
         if (e.target.classList.contains('req-input')) e.target.classList.remove('input-error');
@@ -809,25 +796,24 @@
         const els = document.querySelectorAll(`#${sectionId} input, #${sectionId} textarea, #internalSection input, #internalSection textarea`);
         
         els.forEach(el => {
-            if (el.classList.contains('dev-name') || el.classList.contains('dev-phone')) return;
+            if (el.classList.contains('dev-name')) return;
             if (el.id) {
                 if (el.type === 'radio' || el.type === 'checkbox') formData.standard[el.id] = el.checked;
                 else formData.standard[el.id] = el.value;
             }
         });
 
-        document.querySelectorAll('.dev-phone-row').forEach(row => {
+        document.querySelectorAll('.dev-row').forEach(row => {
             formData.dynamicDevs.push({
-                name: row.querySelector('.dev-name').value,
-                phone: row.querySelector('.dev-phone').value
+                name: row.querySelector('.dev-name').value
             });
         });
-        localStorage.setItem(`propertyFormData_v8_${currentType}`, JSON.stringify(formData));
-        localStorage.setItem(`propertyFormData_v8_lastType`, currentType); 
+        localStorage.setItem(`propertyFormData_v10_${currentType}`, JSON.stringify(formData));
+        localStorage.setItem(`propertyFormData_v10_lastType`, currentType); 
     }
 
     function loadFormData() {
-        const saved = localStorage.getItem(`propertyFormData_v8_${currentType}`);
+        const saved = localStorage.getItem(`propertyFormData_v10_${currentType}`);
         if (saved) {
             const formData = JSON.parse(saved);
             
@@ -848,14 +834,12 @@
             if(formData.dynamicDevs && formData.dynamicDevs.length > 0) {
                 formData.dynamicDevs.forEach(dev => {
                     const row = document.createElement('div');
-                    row.className = 'dev-phone-row';
+                    row.className = 'dev-row';
                     row.innerHTML = `
                         <input type="text" class="req-input dev-name" placeholder="開發姓名" value="${dev.name}">
-                        <input type="tel" class="req-input dev-phone" placeholder="09XX-XXX-XXX" maxlength="12" value="${dev.phone}">
-                        <button type="button" class="btn-remove-row" onclick="this.closest('.dev-phone-row').remove(); saveFormData();">✕</button>
+                        <button type="button" class="btn-remove-row" onclick="this.closest('.dev-row').remove(); saveFormData();">✕</button>
                     `;
                     devList.appendChild(row);
-                    row.querySelector('.dev-phone').addEventListener('input', function() { formatPhone(this); });
                 });
             } else {
                 addDevRow();
@@ -877,9 +861,9 @@
 
     document.getElementById('clearDataBtn').addEventListener('click', function() {
         if(confirm('確定要清除所有填寫的資料嗎？')) {
-            localStorage.removeItem(`propertyFormData_v8_house`);
-            localStorage.removeItem(`propertyFormData_v8_land`);
-            localStorage.removeItem(`propertyFormData_v8_lastType`);
+            localStorage.removeItem(`propertyFormData_v10_house`);
+            localStorage.removeItem(`propertyFormData_v10_land`);
+            localStorage.removeItem(`propertyFormData_v10_lastType`);
             location.reload(); 
         }
     });
@@ -890,13 +874,10 @@
     document.getElementById('copyTextBtn').addEventListener('click', function() {
         let textTemplate = '';
         
-        let devInfos = [];
         let devNames = [];
-        document.querySelectorAll('.dev-phone-row').forEach(row => {
+        document.querySelectorAll('.dev-row').forEach(row => {
             let n = row.querySelector('.dev-name').value.trim();
-            let p = row.querySelector('.dev-phone').value.trim();
             if(n) devNames.push(n);
-            if(n || p) devInfos.push(`${n} ${p}`);
         });
 
         if (currentType === 'house') {
@@ -939,7 +920,6 @@
             
             textTemplate += `-------------------------\n`;
             if(document.getElementById('buildDate').value) textTemplate += `建築完成日：${document.getElementById('buildDate').value}\n`;
-            if(document.getElementById('regDate').value) textTemplate += `登記日期：${document.getElementById('regDate').value}\n`;
             if(document.getElementById('regReason').value) textTemplate += `登記原因：${document.getElementById('regReason').value}\n`;
             if(document.getElementById('taxRate').value) textTemplate += `房地合一稅：${document.getElementById('taxRate').value}\n`;
             if(document.getElementById('structure').value) textTemplate += `主要建材：${document.getElementById('structure').value}\n`;
@@ -993,7 +973,6 @@
             textTemplate += `-------------------------\n導航: ${document.getElementById('l_nav').value || ''}\n`;
             
             textTemplate += `-------------------------\n『土地狀況』\n`;
-            if(document.getElementById('regDate').value) textTemplate += `登記日期：${document.getElementById('regDate').value}\n`;
             if(document.getElementById('regReason').value) textTemplate += `登記原因：${document.getElementById('regReason').value}\n`;
             if(document.getElementById('l_zoning').value) textTemplate += `使用分區：${document.getElementById('l_zoning').value}\n`;
             if(document.getElementById('l_landCategory').value) textTemplate += `使用地類別：${document.getElementById('l_landCategory').value}\n`;
@@ -1114,20 +1093,26 @@
         exportArea.classList.add('capturing'); 
 
         setTimeout(() => {
-            html2canvas(exportArea, { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' }).then(canvas => {
-                const caseId = currentType === 'house' ? document.getElementById('caseId').value.trim() : document.getElementById('l_caseId').value.trim();
-                currentFileName = `永義房屋_明細表_${caseId || '未命名'}.png`;
+            // 加入原生 Safari 與舊版相容的處理
+            try {
+                html2canvas(exportArea, { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' }).then(canvas => {
+                    const caseId = currentType === 'house' ? document.getElementById('caseId').value.trim() : document.getElementById('l_caseId').value.trim();
+                    currentFileName = `永義房屋_明細表_${caseId || '未命名'}.png`;
 
-                canvas.toBlob(function(blob) {
-                    currentImageBlob = blob;
-                    document.getElementById('previewImg').src = URL.createObjectURL(blob);
-                    document.getElementById('previewModal').classList.add('show');
+                    canvas.toBlob(function(blob) {
+                        currentImageBlob = blob;
+                        document.getElementById('previewImg').src = URL.createObjectURL(blob);
+                        document.getElementById('previewModal').classList.add('show');
+                        resetButton();
+                    }, 'image/png');
+                }).catch(err => {
+                    showToast('產生失敗，請稍後再試！', true);
                     resetButton();
-                }, 'image/png');
-            }).catch(err => {
-                showToast('產生失敗，請稍後再試！', true);
+                });
+            } catch(e) {
+                showToast('您的裝置不支援產圖，請更新系統！', true);
                 resetButton();
-            });
+            }
         }, 150);
 
         function resetButton() {
@@ -1144,19 +1129,36 @@
 
     document.getElementById('confirmDownloadBtn').addEventListener('click', function() {
         if (!currentImageBlob) return;
-        const file = new File([currentImageBlob], currentFileName, { type: 'image/png' });
+        
+        try {
+            const file = new File([currentImageBlob], currentFileName, { type: 'image/png' });
 
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            navigator.share({ files: [file], title: '物件明細表', text: `物件明細表送出` })
-            .then(() => document.getElementById('previewModal').classList.remove('show'))
-            .catch(() => console.log('分享取消'));
-        } else {
-            const link = document.createElement('a');
-            link.download = currentFileName; 
-            link.href = URL.createObjectURL(currentImageBlob);
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            showToast('圖片已下載！');
-            document.getElementById('previewModal').classList.remove('show');
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({ files: [file], title: '物件明細表', text: `物件明細表送出` })
+                .then(() => document.getElementById('previewModal').classList.remove('show'))
+                .catch(() => console.log('分享取消'));
+                return;
+            }
+        } catch (error) {
+            console.log('原生分享無法使用，改用傳統下載', error);
+        }
+        
+        try {
+            const reader = new FileReader();
+            reader.readAsDataURL(currentImageBlob);
+            reader.onloadend = function() {
+                const base64data = reader.result;
+                const link = document.createElement('a');
+                link.download = currentFileName;
+                link.href = base64data;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showToast('圖片已下載！');
+                document.getElementById('previewModal').classList.remove('show');
+            }
+        } catch (error) {
+            showToast('下載失敗，請直接長按圖片儲存！', true);
         }
     });
 </script>
