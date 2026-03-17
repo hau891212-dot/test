@@ -152,7 +152,11 @@
             background: var(--bg-color); padding: 20px; border-radius: 16px; width: 100%; max-width: 600px;
             max-height: 90vh; overflow-y: auto; text-align: center; position: relative;
         }
-        #previewImg { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 10px;}
+        /* 特別設計預覽圖，確保它是一張可以長按的真圖片 */
+        #previewImg { 
+            width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+            margin-bottom: 10px; cursor: pointer; user-select: auto; -webkit-touch-callout: default;
+        }
         .modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .modal-actions .row-actions { display: flex; gap: 10px; }
         .modal-actions button { flex: 1; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
@@ -509,7 +513,7 @@
             <button class="btn-copy" id="copyTextBtn">📋 一鍵複製圖文文案</button>
             <div class="row-actions">
                 <button class="btn-back" onclick="document.getElementById('previewModal').classList.remove('show')">返回修改</button>
-                <button class="btn-confirm" id="confirmDownloadBtn">確認無誤並分享圖片</button>
+                <button class="btn-confirm" id="confirmDownloadBtn">分享圖片</button>
             </div>
         </div>
     </div>
@@ -660,7 +664,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
     let currentType = ''; 
-    let currentImageBlob = null;
+    let currentImageBase64 = null; // 改用 Base64 作為跨平台核心
     let currentFileName = '';
 
     // --- UX: 區段切換 (房屋 vs 土地) ---
@@ -808,12 +812,12 @@
                 name: row.querySelector('.dev-name').value
             });
         });
-        localStorage.setItem(`propertyFormData_v10_${currentType}`, JSON.stringify(formData));
-        localStorage.setItem(`propertyFormData_v10_lastType`, currentType); 
+        localStorage.setItem(`propertyFormData_v11_${currentType}`, JSON.stringify(formData));
+        localStorage.setItem(`propertyFormData_v11_lastType`, currentType); 
     }
 
     function loadFormData() {
-        const saved = localStorage.getItem(`propertyFormData_v10_${currentType}`);
+        const saved = localStorage.getItem(`propertyFormData_v11_${currentType}`);
         if (saved) {
             const formData = JSON.parse(saved);
             
@@ -853,7 +857,7 @@
     document.getElementById('propertyForm').addEventListener('input', saveFormData);
     document.getElementById('propertyForm').addEventListener('change', saveFormData);
     
-    // 網頁載入時，直接顯示首頁入口，不自動跳轉
+    // 網頁載入時，直接顯示首頁入口
     window.addEventListener('load', function() {
         document.getElementById('welcomeScreen').classList.remove('hidden');
         document.getElementById('mainContainer').classList.remove('active');
@@ -861,9 +865,9 @@
 
     document.getElementById('clearDataBtn').addEventListener('click', function() {
         if(confirm('確定要清除所有填寫的資料嗎？')) {
-            localStorage.removeItem(`propertyFormData_v10_house`);
-            localStorage.removeItem(`propertyFormData_v10_land`);
-            localStorage.removeItem(`propertyFormData_v10_lastType`);
+            localStorage.removeItem(`propertyFormData_v11_house`);
+            localStorage.removeItem(`propertyFormData_v11_land`);
+            localStorage.removeItem(`propertyFormData_v11_lastType`);
             location.reload(); 
         }
     });
@@ -1005,7 +1009,7 @@
     });
 
     // =========================================
-    // 產圖預覽流程 (分區擷取)
+    // 產圖預覽流程 (全新無敵 Base64 下載引擎)
     // =========================================
     document.getElementById('generateBtn').addEventListener('click', function() {
         let hasError = false;
@@ -1093,26 +1097,20 @@
         exportArea.classList.add('capturing'); 
 
         setTimeout(() => {
-            // 加入原生 Safari 與舊版相容的處理
-            try {
-                html2canvas(exportArea, { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' }).then(canvas => {
-                    const caseId = currentType === 'house' ? document.getElementById('caseId').value.trim() : document.getElementById('l_caseId').value.trim();
-                    currentFileName = `永義房屋_明細表_${caseId || '未命名'}.png`;
+            html2canvas(exportArea, { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' }).then(canvas => {
+                const caseId = currentType === 'house' ? document.getElementById('caseId').value.trim() : document.getElementById('l_caseId').value.trim();
+                currentFileName = `永義房屋_明細表_${caseId || '未命名'}.png`;
 
-                    canvas.toBlob(function(blob) {
-                        currentImageBlob = blob;
-                        document.getElementById('previewImg').src = URL.createObjectURL(blob);
-                        document.getElementById('previewModal').classList.add('show');
-                        resetButton();
-                    }, 'image/png');
-                }).catch(err => {
-                    showToast('產生失敗，請稍後再試！', true);
-                    resetButton();
-                });
-            } catch(e) {
-                showToast('您的裝置不支援產圖，請更新系統！', true);
+                // 取出 Base64 高畫質字串
+                currentImageBase64 = canvas.toDataURL('image/png');
+                document.getElementById('previewImg').src = currentImageBase64;
+                document.getElementById('previewModal').classList.add('show');
+                
                 resetButton();
-            }
+            }).catch(err => {
+                showToast('產生失敗，請稍後再試！', true);
+                resetButton();
+            });
         }, 150);
 
         function resetButton() {
@@ -1127,38 +1125,55 @@
         document.getElementById('previewModal').classList.remove('show');
     });
 
-    document.getElementById('confirmDownloadBtn').addEventListener('click', function() {
-        if (!currentImageBlob) return;
-        
-        try {
-            const file = new File([currentImageBlob], currentFileName, { type: 'image/png' });
+    // --- 終極下載引擎 (Base64 -> Native / A Tag Fallback) ---
+    document.getElementById('confirmDownloadBtn').addEventListener('click', async function() {
+        if (!currentImageBase64) return;
 
+        // 轉換 Base64 成為原生 Blob (比 Canvas.toBlob 更穩定)
+        function dataURItoBlob(dataURI) {
+            const byteString = atob(dataURI.split(',')[1]);
+            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], {type: mimeString});
+        }
+
+        try {
+            const blob = dataURItoBlob(currentImageBase64);
+            const file = new File([blob], currentFileName, { type: 'image/png' });
+
+            // 1. 嘗試使用原生分享 (iOS/Android Share Sheet)
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                navigator.share({ files: [file], title: '物件明細表', text: `物件明細表送出` })
-                .then(() => document.getElementById('previewModal').classList.remove('show'))
-                .catch(() => console.log('分享取消'));
+                await navigator.share({
+                    files: [file],
+                    title: '物件明細表',
+                    text: `物件明細表送出`
+                });
+                document.getElementById('previewModal').classList.remove('show');
                 return;
+            } else {
+                throw new Error("CanShare is false");
             }
         } catch (error) {
-            console.log('原生分享無法使用，改用傳統下載', error);
-        }
-        
-        try {
-            const reader = new FileReader();
-            reader.readAsDataURL(currentImageBlob);
-            reader.onloadend = function() {
-                const base64data = reader.result;
+            // 如果是被使用者取消 (AbortError)，就不做動作
+            if (error.name === 'AbortError') return;
+
+            // 2. 退回使用傳統的 a 標籤下載機制
+            try {
                 const link = document.createElement('a');
+                link.href = currentImageBase64;
                 link.download = currentFileName;
-                link.href = base64data;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                showToast('圖片已下載！');
-                document.getElementById('previewModal').classList.remove('show');
+                showToast('圖片已下載！若沒看到請長按圖片。');
+            } catch (fallbackError) {
+                // 3. 極端環境 (被 LINE 完全阻擋)，提示長按
+                showToast('請直接「長按上方圖片」儲存至手機！', true);
             }
-        } catch (error) {
-            showToast('下載失敗，請直接長按圖片儲存！', true);
         }
     });
 </script>
