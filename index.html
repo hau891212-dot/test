@@ -202,7 +202,11 @@
                         <input type="radio" name="type" id="t1" value="大樓" checked><label class="chip-label" for="t1">大樓</label>
                         <input type="radio" name="type" id="t2" value="透天"><label class="chip-label" for="t2">透天</label>
                         <input type="radio" name="type" id="t3" value="公寓"><label class="chip-label" for="t3">公寓</label>
+                        <input type="radio" name="type" id="t4" value="農地"><label class="chip-label" for="t4">農地</label>
+                        <input type="radio" name="type" id="t5" value="建地"><label class="chip-label" for="t5">建地</label>
+                        <input type="radio" name="type" id="t6" value="其他"><label class="chip-label" for="t6">其他</label>
                     </div>
+                    <input type="text" id="typeOtherText" class="other-text-input" placeholder="請輸入其他類型 (例：廠房/廠辦)">
                 </div>
                 <div class="form-group">
                     <label class="required">物件現況</label>
@@ -304,7 +308,7 @@
                     <input type="checkbox" name="parking" id="p7" value="無"><label class="chip-label" for="p7">無</label>
                     <input type="checkbox" name="parking" id="p_other" value="其他"><label class="chip-label" for="p_other">其他</label>
                 </div>
-                <input type="text" id="parkingOtherText" class="other-text-input" placeholder="請輸入其他車位類型 (例：機車位/庭院車位)">
+                <input type="text" id="parkingOtherText" class="other-text-input" placeholder="請輸入其他車位類型 (例：庭院車位/機車位)">
             </div>
 
             <div class="form-group">
@@ -480,10 +484,7 @@
     // --- UX: 電話號碼自動格式化 ---
     function formatPhone(e) {
         let x = e.target.value.replace(/\D/g, '').match(/(\d{0,4})(\d{0,3})(\d{0,3})/);
-        if (!x[1]) {
-            e.target.value = '';
-            return;
-        }
+        if (!x[1]) { e.target.value = ''; return; }
         e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
     }
     document.querySelector('.phone-input').addEventListener('input', formatPhone);
@@ -540,6 +541,15 @@
     areaInput.addEventListener('input', calculateUnitPrice);
 
     // --- UX: 動態顯示「其他」輸入框 ---
+    // 類型 (新增農地、建地、其他)
+    document.querySelectorAll('input[name="type"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const otherInput = document.getElementById('typeOtherText');
+            if (this.id === 't6') { otherInput.style.display = 'block'; otherInput.focus(); } 
+            else { otherInput.style.display = 'none'; otherInput.value = ''; }
+        });
+    });
+
     // 瓦斯
     document.querySelectorAll('input[name="gas"]').forEach(radio => {
         radio.addEventListener('change', function() {
@@ -549,17 +559,18 @@
         });
     });
 
-    // 車位
-    document.getElementById('p_other').addEventListener('change', function() {
-        const otherInput = document.getElementById('parkingOtherText');
-        if (this.checked) { otherInput.style.display = 'block'; otherInput.focus(); } 
-        else { otherInput.style.display = 'none'; otherInput.value = ''; }
-    });
-
-    // 車位防呆 (加入 p_other 判斷)
+    // 車位防呆 & 動態輸入框
     let parkingWarned = false;
     document.querySelectorAll('input[name="parking"]').forEach(cb => {
         cb.addEventListener('change', function() {
+            // 動態輸入框邏輯
+            if (this.id === 'p_other') {
+                const otherInput = document.getElementById('parkingOtherText');
+                if (this.checked) { otherInput.style.display = 'block'; otherInput.focus(); } 
+                else { otherInput.style.display = 'none'; otherInput.value = ''; }
+            }
+
+            // 防呆邏輯
             const checkedCount = document.querySelectorAll('input[name="parking"]:checked').length;
             if (checkedCount > 1 && !parkingWarned) {
                 const confirmMulti = confirm('⚠️ 提醒：車位類型通常只需選擇一種！\n\n請問您確定要選擇多個車位嗎？(點選確定後將不再提醒)');
@@ -567,7 +578,6 @@
                     parkingWarned = true; 
                 } else {
                     this.checked = false;
-                    // 如果剛好取消勾選的是「其他」，連帶隱藏輸入框
                     if(this.id === 'p_other') {
                         document.getElementById('parkingOtherText').style.display = 'none';
                         document.getElementById('parkingOtherText').value = '';
@@ -645,13 +655,20 @@
         const dd = String(today.getDate()).padStart(2, '0');
         document.getElementById('out_metaDate').innerText = `${yyyy}/${mm}/${dd}`;
 
-        const radioGroups = ['type', 'status', 'registration', 'water'];
+        // 搬運單選資料
+        const radioGroups = ['status', 'registration', 'water'];
         radioGroups.forEach(name => {
             const checked = document.querySelector(`input[name="${name}"]:checked`);
             document.getElementById('out_' + name).innerText = checked ? checked.value : '';
         });
 
-        // 瓦斯 (含其他)
+        // 處理類型 (含其他)
+        const typeChecked = document.querySelector('input[name="type"]:checked');
+        let typeOutput = '';
+        if (typeChecked) { typeOutput = (typeChecked.value === '其他') ? (document.getElementById('typeOtherText').value.trim() || '其他') : typeChecked.value; }
+        document.getElementById('out_type').innerText = typeOutput;
+
+        // 處理瓦斯 (含其他)
         const gasChecked = document.querySelector('input[name="gas"]:checked');
         let gasOutput = '';
         if (gasChecked) { gasOutput = (gasChecked.value === '其他') ? (document.getElementById('gasOtherText').value.trim() || '其他') : gasChecked.value; }
