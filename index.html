@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>承峰不動產 - 物件明細表電子化</title>
+    <title>承峰不動產 - 物件明細建檔系統</title>
     <style>
-        /* 永義房屋品牌標準色與 UI 變數 */
+        /* =========================================
+           1. 品牌視覺與全域變數
+           ========================================= */
         :root {
             --brand-yellow: #FDB913;
             --brand-green: #007A33;
@@ -16,171 +18,123 @@
             --input-radius: 12px;
         }
 
-        * {
-            box-sizing: border-box;
-            font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang TC', '微軟正黑體', sans-serif;
-        }
+        * { box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang TC', '微軟正黑體', sans-serif; }
 
         body {
             background-color: var(--bg-color);
             color: var(--brand-dark);
             margin: 0;
-            padding: 20px 15px;
+            padding: 20px 10px;
             line-height: 1.5;
         }
 
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
 
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
+        .header { text-align: center; margin-bottom: 24px; }
+        .header h1 { color: var(--brand-green); font-size: 26px; margin: 0; }
+        .header p { color: var(--brand-dark); font-size: 14px; margin-top: 5px; opacity: 0.8; }
 
-        .header h1 {
-            color: var(--brand-green);
-            font-size: 24px;
-            margin: 0;
-        }
-
+        /* =========================================
+           2. 表單介面樣式 (手機版優先設計)
+           ========================================= */
         .card {
             background: #FFFFFF;
             border-radius: var(--card-radius);
-            padding: 24px;
+            padding: 20px;
             margin-bottom: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border-top: 4px solid var(--brand-yellow); 
         }
 
         .card-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: var(--brand-dark);
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            font-size: 18px; font-weight: bold; margin-top: 0; margin-bottom: 20px;
+            color: var(--brand-dark); border-bottom: 1px solid #eee; padding-bottom: 10px;
         }
 
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: var(--brand-dark); }
+        .required::after { content: " *"; color: var(--brand-red); }
 
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: var(--brand-dark);
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%; padding: 12px 16px; border: 1px solid #E0E0E0;
+            border-radius: var(--input-radius); font-size: 16px;
+            transition: all 0.3s ease; color: var(--brand-dark); background-color: #FAFAFA;
         }
-
-        .required::after {
-            content: " *";
-            color: var(--brand-red);
-        }
-
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #E0E0E0;
-            border-radius: var(--input-radius);
-            font-size: 16px;
-            transition: all 0.3s ease;
-            color: var(--brand-dark);
-            background-color: #FAFAFA;
-        }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--brand-green);
-            background-color: #FFFFFF;
+        input:focus, textarea:focus, select:focus {
+            outline: none; border-color: var(--brand-green); background-color: #FFFFFF;
             box-shadow: 0 0 0 3px rgba(0, 122, 51, 0.1);
         }
+        textarea { resize: vertical; min-height: 80px; }
 
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* 按鈕式單選/多選標籤 (Chips) */
-        .chip-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .chip-group input[type="radio"],
-        .chip-group input[type="checkbox"] {
-            display: none;
-        }
-
+        /* Chips 按鈕式單選/多選 */
+        .chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+        .chip-group input[type="radio"], .chip-group input[type="checkbox"] { display: none; }
         .chip-label {
-            padding: 8px 14px;
-            border: 1px solid #E0E0E0;
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background-color: #FFFFFF;
-            user-select: none;
+            padding: 8px 14px; border: 1px solid #E0E0E0; border-radius: 20px;
+            font-size: 14px; cursor: pointer; transition: all 0.2s ease;
+            background-color: #FFFFFF; user-select: none;
+        }
+        .chip-group input:checked + .chip-label {
+            background-color: var(--brand-green); color: #FFFFFF; border-color: var(--brand-green);
         }
 
-        .chip-group input[type="radio"]:checked + .chip-label,
-        .chip-group input[type="checkbox"]:checked + .chip-label {
-            background-color: var(--brand-green);
-            color: #FFFFFF;
-            border-color: var(--brand-green);
-        }
-
-        /* 排版網格 */
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        /* 網格排列 */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        @media (max-width: 600px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
 
-        /* 底部操作按鈕 */
+        /* 產圖按鈕 */
         .submit-btn {
-            width: 100%;
-            background-color: var(--brand-green);
-            color: white;
-            border: none;
-            padding: 18px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: var(--input-radius);
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 122, 51, 0.2);
-            transition: transform 0.1s, box-shadow 0.1s;
-            margin-bottom: 40px;
+            width: 100%; background-color: var(--brand-green); color: white;
+            border: none; padding: 18px; font-size: 18px; font-weight: bold;
+            border-radius: var(--input-radius); cursor: pointer; margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 122, 51, 0.2); transition: 0.2s;
         }
+        .submit-btn:active { transform: translateY(2px); }
 
-        .submit-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 6px rgba(0, 122, 51, 0.2);
+        /* =========================================
+           3. 隱藏的輸出表格樣式 (截圖專用版面)
+           ========================================= */
+        .export-wrapper {
+            position: absolute; left: -9999px; top: 0; /* 平常隱藏在視窗外 */
+            width: 1000px; /* 固定產生圖片的寬度，確保排版不跑位 */
+            background-color: #FFFFFF; padding: 40px;
+            border: 2px solid #56524D; border-radius: 12px;
         }
+        /* 截圖時瞬間叫回畫面 */
+        .export-wrapper.capturing { position: relative; left: 0; z-index: -1; margin-bottom: 20px;}
 
-        @media (max-width: 480px) {
-            .grid-3 { grid-template-columns: 1fr 1fr; }
+        .export-header-title {
+            text-align: center; font-size: 32px; font-weight: bold;
+            color: var(--brand-green); border-bottom: 4px solid var(--brand-yellow);
+            padding-bottom: 15px; margin-bottom: 20px; letter-spacing: 2px;
         }
+        
+        .export-table {
+            width: 100%; border-collapse: collapse; font-size: 17px; color: #111;
+        }
+        .export-table th, .export-table td {
+            border: 1px solid #56524D; padding: 12px 10px; text-align: left; vertical-align: middle;
+        }
+        .export-table th { background-color: #f2f2f2; font-weight: bold; color: var(--brand-dark); text-align: center; white-space: nowrap; }
+        
+        /* 表格細節排版微調 */
+        .td-center { text-align: center !important; }
+        .text-red { color: var(--brand-red); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>物件明細建檔系統</h1>
+        <h1>承峰不動產 - 物件明細建檔</h1>
+        <p>請填寫物件資訊，系統將自動生成專業表格圖檔</p>
     </div>
 
     <form id="propertyForm">
         
         <div class="card">
             <h2 class="card-title">📝 基本資料</h2>
-            
             <div class="grid-2">
                 <div class="form-group">
                     <label class="required" for="caseId">物件編號</label>
@@ -191,219 +145,89 @@
                     <input type="text" id="caseName" placeholder="例：合總2期商業區兩房">
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="required" for="address">地址</label>
                 <input type="text" id="address" placeholder="完整地址">
             </div>
-
-            <div class="form-group">
-                <label class="required">類型</label>
-                <div class="chip-group">
-                    <input type="radio" name="type" id="type1" value="大樓" checked><label class="chip-label" for="type1">大樓</label>
-                    <input type="radio" name="type" id="type2" value="透天"><label class="chip-label" for="type2">透天</label>
-                    <input type="radio" name="type" id="type3" value="公寓"><label class="chip-label" for="type3">公寓</label>
-                    <input type="radio" name="type" id="type4" value="其他"><label class="chip-label" for="type4">其他</label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="required">物件現況</label>
-                <div class="chip-group">
-                    <input type="radio" name="status" id="status1" value="空屋" checked><label class="chip-label" for="status1">空屋</label>
-                    <input type="radio" name="status" id="status2" value="自用"><label class="chip-label" for="status2">自用</label>
-                    <input type="radio" name="status" id="status3" value="預售"><label class="chip-label" for="status3">預售</label>
-                    <input type="radio" name="status" id="status4" value="租賃中"><label class="chip-label" for="status4">租賃中</label>
-                </div>
-            </div>
-
             <div class="grid-2">
                 <div class="form-group">
-                    <label for="usage">物件用途</label>
-                    <input type="text" id="usage" placeholder="例：集合住宅">
+                    <label class="required">類型</label>
+                    <div class="chip-group">
+                        <input type="radio" name="type" id="t1" value="大樓" checked><label class="chip-label" for="t1">大樓</label>
+                        <input type="radio" name="type" id="t2" value="透天"><label class="chip-label" for="t2">透天</label>
+                        <input type="radio" name="type" id="t3" value="公寓"><label class="chip-label" for="t3">公寓</label>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="zoning">使用分區</label>
-                    <input type="text" id="zoning" placeholder="例：商業區">
+                    <label class="required">物件現況</label>
+                    <div class="chip-group">
+                        <input type="radio" name="status" id="s1" value="空屋" checked><label class="chip-label" for="s1">空屋</label>
+                        <input type="radio" name="status" id="s2" value="自用"><label class="chip-label" for="s2">自用</label>
+                        <input type="radio" name="status" id="s3" value="預售"><label class="chip-label" for="s3">預售</label>
+                        <input type="radio" name="status" id="s4" value="租賃中"><label class="chip-label" for="s4">租賃</label>
+                    </div>
                 </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label for="usage">物件用途</label><input type="text" id="usage" placeholder="例：集合住宅"></div>
+                <div class="form-group"><label for="zoning">使用分區</label><input type="text" id="zoning" placeholder="例：商業區"></div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label for="keyStatus">交付鑰匙</label><input type="text" id="keyStatus" placeholder="例：密碼"></div>
+                <div class="form-group"><label for="structure">主要結構</label><input type="text" id="structure" placeholder="例：RC"></div>
             </div>
         </div>
 
         <div class="card">
             <h2 class="card-title">💰 價格資訊 (單位：萬/元)</h2>
-            
-            <div class="grid-2">
-                <div class="form-group">
-                    <label class="required" for="price">委託價 (萬)</label>
-                    <input type="number" id="price" placeholder="例：628">
-                </div>
-                <div class="form-group">
-                    <label for="acquirePrice">取得價格 (萬)</label>
-                    <input type="number" id="acquirePrice">
-                </div>
-                <div class="form-group">
-                    <label for="unitPrice">單坪 (萬)</label>
-                    <input type="number" step="0.01" id="unitPrice">
-                </div>
-                <div class="form-group">
-                    <label for="setPrice">設定價 (萬)</label>
-                    <input type="number" id="setPrice">
-                </div>
-                <div class="form-group">
-                    <label for="marketPrice">行情價 (萬)</label>
-                    <input type="number" id="marketPrice">
-                </div>
-                <div class="form-group">
-                    <label for="bottomPrice">可談價 (萬)</label>
-                    <input type="number" id="bottomPrice">
-                </div>
+            <div class="grid-3">
+                <div class="form-group"><label class="required" for="price">委託價 (萬)</label><input type="number" id="price"></div>
+                <div class="form-group"><label for="acquirePrice">取得價格 (萬)</label><input type="number" id="acquirePrice"></div>
+                <div class="form-group"><label for="unitPrice">單坪 (萬)</label><input type="number" step="0.01" id="unitPrice"></div>
+                <div class="form-group"><label for="setPrice">設定價 (萬)</label><input type="number" id="setPrice"></div>
+                <div class="form-group"><label for="marketPrice">行情價 (萬)</label><input type="number" id="marketPrice"></div>
+                <div class="form-group"><label for="bottomPrice">可談價 (萬)</label><input type="number" id="bottomPrice"></div>
             </div>
         </div>
 
         <div class="card">
             <h2 class="card-title">📏 坪數與土地</h2>
-            
             <div class="grid-3">
-                <div class="form-group">
-                    <label class="required" for="totalArea">總坪數</label>
-                    <input type="number" step="0.01" id="totalArea">
-                </div>
-                <div class="form-group">
-                    <label for="mainArea">主建物</label>
-                    <input type="number" step="0.01" id="mainArea">
-                </div>
-                <div class="form-group">
-                    <label for="subArea">附屬建物</label>
-                    <input type="number" step="0.01" id="subArea">
-                </div>
-                <div class="form-group">
-                    <label for="indoorArea">室內坪數</label>
-                    <input type="number" step="0.01" id="indoorArea">
-                </div>
-                <div class="form-group">
-                    <label for="publicArea">公設坪數</label>
-                    <input type="number" step="0.01" id="publicArea">
-                </div>
-                <div class="form-group">
-                    <label for="parkingArea">車位坪數</label>
-                    <input type="number" step="0.01" id="parkingArea">
-                </div>
-                <div class="form-group">
-                    <label for="addArea">加建</label>
-                    <input type="number" step="0.01" id="addArea">
-                </div>
-                <div class="form-group">
-                    <label for="baseArea">基地坪數</label>
-                    <input type="number" step="0.01" id="baseArea">
-                </div>
-                <div class="form-group">
-                    <label for="landShare">地坪(持分)</label>
-                    <input type="text" id="landShare">
-                </div>
+                <div class="form-group"><label class="required" for="totalArea">總坪數</label><input type="number" step="0.01" id="totalArea"></div>
+                <div class="form-group"><label for="mainArea">主建物</label><input type="number" step="0.01" id="mainArea"></div>
+                <div class="form-group"><label for="subArea">附屬建物</label><input type="number" step="0.01" id="subArea"></div>
+                <div class="form-group"><label for="indoorArea">室內坪數</label><input type="number" step="0.01" id="indoorArea"></div>
+                <div class="form-group"><label for="publicArea">公設坪數</label><input type="number" step="0.01" id="publicArea"></div>
+                <div class="form-group"><label for="parkingArea">車位坪數</label><input type="number" step="0.01" id="parkingArea"></div>
+                <div class="form-group"><label for="addArea">加建</label><input type="number" step="0.01" id="addArea"></div>
+                <div class="form-group"><label for="baseArea">基地坪數</label><input type="number" step="0.01" id="baseArea"></div>
+                <div class="form-group"><label for="landShare">地坪(持分)</label><input type="text" id="landShare"></div>
             </div>
-
             <div class="grid-2">
-                <div class="form-group">
-                    <label for="landNumber">地/建號</label>
-                    <input type="text" id="landNumber" placeholder="例：平天段(398)...">
-                </div>
-                <div class="form-group">
-                    <label for="publicRatio">公設比</label>
-                    <input type="text" id="publicRatio" placeholder="例：33.20%">
-                </div>
-                <div class="form-group">
-                    <label for="widthDepth">面寬 / 深度</label>
-                    <input type="text" id="widthDepth">
-                </div>
-                <div class="form-group">
-                    <label for="roadWidth">路寬</label>
-                    <input type="text" id="roadWidth" placeholder="例：6米">
-                </div>
+                <div class="form-group"><label for="landNumber">地/建號</label><input type="text" id="landNumber"></div>
+                <div class="form-group"><label for="publicRatio">公設比</label><input type="text" id="publicRatio" placeholder="例：33.20%"></div>
+                <div class="form-group"><label for="widthDepth">面寬 / 深度</label><input type="text" id="widthDepth"></div>
+                <div class="form-group"><label for="roadWidth">路寬</label><input type="text" id="roadWidth" placeholder="例：6米"></div>
             </div>
         </div>
 
         <div class="card">
-            <h2 class="card-title">🏢 建築與格局</h2>
+            <h2 class="card-title">🏢 建築、社區與格局</h2>
+            <div class="grid-2">
+                <div class="form-group"><label for="builder">建設公司</label><input type="text" id="builder"></div>
+                <div class="form-group"><label for="layout">格局</label><input type="text" id="layout" placeholder="例：2房2廳1衛1陽台"></div>
+                <div class="form-group"><label for="floorHeight">樓高</label><input type="text" id="floorHeight"></div>
+                <div class="form-group"><label for="buildDate">建築完成日</label><input type="text" id="buildDate" placeholder="例：114年05月13日"></div>
+                <div class="form-group"><label for="totalHouseholds">總戶數</label><input type="text" id="totalHouseholds"></div>
+                <div class="form-group"><label for="buildPlan">建築規劃</label><input type="text" id="buildPlan" placeholder="例：地上14層/地下2層/位於4樓"></div>
+                <div class="form-group"><label for="elevatorRatio">電梯 / 單層</label><input type="text" id="elevatorRatio" placeholder="例：2梯8戶"></div>
+                <div class="form-group"><label for="direction">坐向 (管理室/家門/落地窗)</label><input type="text" id="direction" placeholder="例：落地窗朝西南"></div>
+                <div class="form-group"><label for="communityName">社區名稱</label><input type="text" id="communityName"></div>
+                <div class="form-group"><label for="managementCompany">管理維護公司</label><input type="text" id="managementCompany"></div>
+                <div class="form-group"><label for="managementFee">管理費</label><input type="text" id="managementFee"></div>
+                <div class="form-group"><label for="school">學區</label><input type="text" id="school"></div>
+            </div>
             
-            <div class="grid-2">
-                <div class="form-group">
-                    <label for="structure">主要結構</label>
-                    <input type="text" id="structure" placeholder="例：RC">
-                </div>
-                <div class="form-group">
-                    <label for="layout">格局</label>
-                    <input type="text" id="layout" placeholder="例：2房2廳1衛1陽台">
-                </div>
-                <div class="form-group">
-                    <label for="floorHeight">樓高</label>
-                    <input type="text" id="floorHeight" placeholder="例：3.4米">
-                </div>
-                <div class="form-group">
-                    <label for="buildDate">建築完成日</label>
-                    <input type="text" id="buildDate" placeholder="例：114年05月13日">
-                </div>
-                <div class="form-group">
-                    <label for="builder">建設公司</label>
-                    <input type="text" id="builder">
-                </div>
-                <div class="form-group">
-                    <label for="totalHouseholds">總戶數</label>
-                    <input type="text" id="totalHouseholds" placeholder="例：107, 住104店3">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="buildPlan">建築規劃</label>
-                <input type="text" id="buildPlan" placeholder="地上 _ 樓 / 地下 _ 樓 / 位於 _ 樓">
-            </div>
-
-            <div class="grid-2">
-                <div class="form-group">
-                    <label for="elevatorRatio">電梯 / 單層</label>
-                    <input type="text" id="elevatorRatio" placeholder="例：2梯8戶">
-                </div>
-                <div class="form-group">
-                    <label for="direction">坐向 (管理室/家門/落地窗)</label>
-                    <input type="text" id="direction" placeholder="例：落地窗朝西南">
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="card-title">🏘️ 社區與設備</h2>
-            
-            <div class="grid-2">
-                <div class="form-group">
-                    <label for="communityName">社區名稱</label>
-                    <input type="text" id="communityName">
-                </div>
-                <div class="form-group">
-                    <label for="managementCompany">管理維護公司</label>
-                    <input type="text" id="managementCompany">
-                </div>
-                <div class="form-group">
-                    <label for="managementFee">管理費</label>
-                    <input type="text" id="managementFee" placeholder="例：75元/坪">
-                </div>
-                <div class="form-group">
-                    <label for="keyStatus">交付鑰匙</label>
-                    <input type="text" id="keyStatus" placeholder="例：密碼">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>車位類型</label>
-                <div class="chip-group">
-                    <input type="checkbox" id="park1" value="坡道"><label class="chip-label" for="park1">坡道</label>
-                    <input type="checkbox" id="park2" value="平面"><label class="chip-label" for="park2">平面</label>
-                    <input type="checkbox" id="park3" value="機械"><label class="chip-label" for="park3">機械</label>
-                    <input type="checkbox" id="park4" value="機械平移"><label class="chip-label" for="park4">機械平移</label>
-                    <input type="checkbox" id="park5" value="機械上層"><label class="chip-label" for="park5">機械上層</label>
-                    <input type="checkbox" id="park6" value="機械下層"><label class="chip-label" for="park6">機械下層</label>
-                    <input type="checkbox" id="park7" value="無"><label class="chip-label" for="park7">無</label>
-                </div>
-            </div>
-
             <div class="form-group">
                 <label>建物是否保存登記</label>
                 <div class="chip-group">
@@ -411,101 +235,245 @@
                     <input type="radio" name="registration" id="reg2" value="否"><label class="chip-label" for="reg2">否</label>
                 </div>
             </div>
-
             <div class="grid-2">
-                <div class="form-group">
-                    <label for="waterInfo">自來水</label>
-                    <input type="text" id="waterInfo" placeholder="例：有">
-                </div>
+                <div class="form-group"><label for="waterInfo">自來水</label><input type="text" id="waterInfo" placeholder="例：V"></div>
                 <div class="form-group">
                     <label>瓦斯</label>
                     <div class="chip-group">
-                        <input type="radio" name="gas" id="gas1" value="桶裝"><label class="chip-label" for="gas1">桶裝</label>
-                        <input type="radio" name="gas" id="gas2" value="天然氣" checked><label class="chip-label" for="gas2">天然氣</label>
-                        <input type="radio" name="gas" id="gas3" value="其他"><label class="chip-label" for="gas3">其他</label>
+                        <input type="radio" name="gas" id="g1" value="桶裝"><label class="chip-label" for="g1">桶裝</label>
+                        <input type="radio" name="gas" id="g2" value="天然氣" checked><label class="chip-label" for="g2">天然氣</label>
+                        <input type="radio" name="gas" id="g3" value="其他"><label class="chip-label" for="g3">其他</label>
                     </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>車位類型</label>
+                <div class="chip-group">
+                    <input type="checkbox" name="parking" id="p1" value="坡道"><label class="chip-label" for="p1">坡道</label>
+                    <input type="checkbox" name="parking" id="p2" value="平面"><label class="chip-label" for="p2">平面</label>
+                    <input type="checkbox" name="parking" id="p3" value="機械"><label class="chip-label" for="p3">機械</label>
+                    <input type="checkbox" name="parking" id="p4" value="機械平移"><label class="chip-label" for="p4">機械平移</label>
+                    <input type="checkbox" name="parking" id="p5" value="上層"><label class="chip-label" for="p5">上層</label>
+                    <input type="checkbox" name="parking" id="p6" value="下層"><label class="chip-label" for="p6">下層</label>
+                    <input type="checkbox" name="parking" id="p7" value="無"><label class="chip-label" for="p7">無</label>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>公設 (可多選)</label>
                 <div class="chip-group">
-                    <input type="checkbox" id="fac1" value="交誼廳"><label class="chip-label" for="fac1">交誼廳</label>
-                    <input type="checkbox" id="fac2" value="閱覽室"><label class="chip-label" for="fac2">閱覽室</label>
-                    <input type="checkbox" id="fac3" value="健身房"><label class="chip-label" for="fac3">健身房</label>
-                    <input type="checkbox" id="fac4" value="視聽室"><label class="chip-label" for="fac4">視聽室</label>
-                    <input type="checkbox" id="fac5" value="兒童遊戲區"><label class="chip-label" for="fac5">兒童遊戲區</label>
-                    <input type="checkbox" id="fac6" value="KTV"><label class="chip-label" for="fac6">KTV</label>
-                    <input type="checkbox" id="fac7" value="環保間"><label class="chip-label" for="fac7">環保間</label>
-                    <input type="checkbox" id="fac8" value="其他"><label class="chip-label" for="fac8">其他</label>
+                    <input type="checkbox" name="facility" id="f1" value="交誼廳"><label class="chip-label" for="f1">交誼廳</label>
+                    <input type="checkbox" name="facility" id="f2" value="閱覽室"><label class="chip-label" for="f2">閱覽室</label>
+                    <input type="checkbox" name="facility" id="f3" value="健身房"><label class="chip-label" for="f3">健身房</label>
+                    <input type="checkbox" name="facility" id="f4" value="視聽室"><label class="chip-label" for="f4">視聽室</label>
+                    <input type="checkbox" name="facility" id="f5" value="兒童遊戲區"><label class="chip-label" for="f5">兒童遊戲區</label>
+                    <input type="checkbox" name="facility" id="f6" value="KTV"><label class="chip-label" for="f6">KTV</label>
+                    <input type="checkbox" name="facility" id="f7" value="環保間"><label class="chip-label" for="f7">環保間</label>
                 </div>
             </div>
         </div>
 
         <div class="card">
             <h2 class="card-title">📍 周邊與行銷</h2>
-            
             <div class="grid-2">
-                <div class="form-group">
-                    <label for="school">學區</label>
-                    <input type="text" id="school" placeholder="例：斗南國小 / 斗南國中">
-                </div>
-                <div class="form-group">
-                    <label for="market">鄰近市場</label>
-                    <input type="text" id="market">
-                </div>
-                <div class="form-group">
-                    <label for="park">鄰近公園</label>
-                    <input type="text" id="park">
-                </div>
-                <div class="form-group">
-                    <label>拍攝VR</label>
-                    <div class="chip-group">
-                        <input type="radio" name="vr" id="vr1" value="是"><label class="chip-label" for="vr1">是</label>
-                        <input type="radio" name="vr" id="vr2" value="否" checked><label class="chip-label" for="vr2">否</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="regDate">登記日期</label>
-                    <input type="text" id="regDate" placeholder="例：115/01/27">
-                </div>
-                <div class="form-group">
-                    <label for="regReason">登記原因</label>
-                    <input type="text" id="regReason" placeholder="例：買賣">
-                </div>
-                <div class="form-group">
-                    <label for="sellReason">售屋動機</label>
-                    <input type="text" id="sellReason" placeholder="例：投資">
-                </div>
-                <div class="form-group">
-                    <label for="meetPlace">約看地點</label>
-                    <input type="text" id="meetPlace" placeholder="例：現場、福安醫院">
-                </div>
-                <div class="form-group">
-                    <label for="developer">開發</label>
-                    <input type="text" id="developer" placeholder="填寫人">
-                </div>
-                <div class="form-group">
-                    <label for="phone">聯絡電話</label>
-                    <input type="text" id="phone" placeholder="填寫人電話">
-                </div>
+                <div class="form-group"><label for="market">鄰近市場</label><input type="text" id="market"></div>
+                <div class="form-group"><label for="park">鄰近公園</label><input type="text" id="park"></div>
+                <div class="form-group"><label for="regDate">登記日期</label><input type="text" id="regDate"></div>
+                <div class="form-group"><label for="regReason">登記原因</label><input type="text" id="regReason"></div>
+                <div class="form-group"><label for="sellReason">售屋動機</label><input type="text" id="sellReason"></div>
+                <div class="form-group"><label for="meetPlace">約看地點</label><input type="text" id="meetPlace"></div>
+                <div class="form-group"><label for="developer">開發</label><input type="text" id="developer"></div>
+                <div class="form-group"><label for="phone">聯絡電話</label><input type="text" id="phone"></div>
             </div>
-
             <div class="form-group">
-                <label for="memo">備註</label>
-                <textarea id="memo" placeholder="預繳之萬公基金..."></textarea>
+                <label>拍攝VR</label>
+                <div class="chip-group">
+                    <input type="radio" name="vr" id="v1" value="是"><label class="chip-label" for="v1">是</label>
+                    <input type="radio" name="vr" id="v2" value="否" checked><label class="chip-label" for="v2">否</label>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="features">銷售重點及訴求重點</label>
-                <textarea id="features" placeholder="例：格局方正、採光佳、視野好..."></textarea>
-            </div>
+            <div class="form-group"><label for="memo">備註</label><textarea id="memo"></textarea></div>
+            <div class="form-group"><label for="features">銷售重點及訴求重點</label><textarea id="features"></textarea></div>
         </div>
 
         <button type="button" class="submit-btn" id="generateBtn">產生圖片</button>
-
     </form>
 </div>
+
+<div id="exportArea" class="export-wrapper">
+    <div class="export-header-title">物件明細表</div>
+    <table class="export-table">
+        <tr>
+            <th width="12%">物件編號</th><td width="20%"><span id="out_caseId"></span></td>
+            <th width="12%">案名</th><td width="36%" colspan="3"><span id="out_caseName"></span></td>
+            <th width="10%">類型</th><td width="10%" class="td-center"><span id="out_type"></span></td>
+        </tr>
+        <tr>
+            <th>物件現況</th><td class="td-center"><span id="out_status"></span></td>
+            <th>地址</th><td colspan="5"><span id="out_address"></span></td>
+        </tr>
+        <tr>
+            <th>物件用途</th><td class="td-center"><span id="out_usage"></span></td>
+            <th>委託價</th><td class="text-red td-center"><span id="out_price"></span> 萬</td>
+            <th width="10%">取得價</th><td class="td-center"><span id="out_acquirePrice"></span> 萬</td>
+            <th width="10%">地/建號</th><td class="td-center"><span id="out_landNumber"></span></td>
+        </tr>
+        <tr>
+            <th>使用分區</th><td class="td-center"><span id="out_zoning"></span></td>
+            <th>單坪</th><td class="td-center"><span id="out_unitPrice"></span> 萬</td>
+            <th>設定價</th><td class="td-center"><span id="out_setPrice"></span> 萬</td>
+            <th>坐向</th><td><span id="out_direction"></span></td>
+        </tr>
+        <tr>
+            <th>交付鑰匙</th><td class="td-center"><span id="out_keyStatus"></span></td>
+            <th>行情價</th><td class="td-center"><span id="out_marketPrice"></span> 萬</td>
+            <th>可談價</th><td class="td-center"><span id="out_bottomPrice"></span> 萬</td>
+            <th>地坪(持分)</th><td class="td-center"><span id="out_landShare"></span></td>
+        </tr>
+        <tr>
+            <th>社區名稱</th><td class="td-center"><span id="out_communityName"></span></td>
+            <th>總坪數</th><td class="text-red td-center"><span id="out_totalArea"></span> 坪</td>
+            <th>基地坪數</th><td class="td-center"><span id="out_baseArea"></span> 坪</td>
+            <th>路寬</th><td class="td-center"><span id="out_roadWidth"></span></td>
+        </tr>
+        <tr>
+            <th>建設公司</th><td class="td-center"><span id="out_builder"></span></td>
+            <th>主建/附屬</th><td class="td-center"><span id="out_mainArea"></span> / <span id="out_subArea"></span></td>
+            <th>室內坪數</th><td class="td-center"><span id="out_indoorArea"></span> 坪</td>
+            <th>面寬/深度</th><td class="td-center"><span id="out_widthDepth"></span></td>
+        </tr>
+        <tr>
+            <th>總戶數</th><td class="td-center"><span id="out_totalHouseholds"></span></td>
+            <th>建築規劃</th><td colspan="3"><span id="out_buildPlan"></span></td>
+            <th>公設比</th><td class="td-center"><span id="out_publicRatio"></span></td>
+        </tr>
+        <tr>
+            <th>電梯/單層</th><td class="td-center"><span id="out_elevatorRatio"></span></td>
+            <th>公設坪數</th><td class="td-center"><span id="out_publicArea"></span> 坪</td>
+            <th>車位坪數</th><td class="td-center"><span id="out_parkingArea"></span> 坪</td>
+            <th>樓高</th><td class="td-center"><span id="out_floorHeight"></span></td>
+        </tr>
+        <tr>
+            <th>管理費</th><td class="td-center"><span id="out_managementFee"></span></td>
+            <th>主要結構</th><td class="td-center"><span id="out_structure"></span></td>
+            <th>加建</th><td class="td-center"><span id="out_addArea"></span></td>
+            <th>建築完成日</th><td class="td-center"><span id="out_buildDate"></span></td>
+        </tr>
+        <tr>
+            <th>學區</th><td class="td-center"><span id="out_school"></span></td>
+            <th>格局</th><td colspan="3"><span id="out_layout"></span></td>
+            <th>登記日期</th><td class="td-center"><span id="out_regDate"></span></td>
+        </tr>
+        <tr>
+            <th>鄰近市場/公園</th><td colspan="3"><span id="out_market"></span> / <span id="out_park"></span></td>
+            <th>管理公司</th><td><span id="out_managementCompany"></span></td>
+            <th>登記原因</th><td class="td-center"><span id="out_regReason"></span></td>
+        </tr>
+        <tr>
+            <th>公設項目</th><td colspan="3"><span id="out_facility"></span></td>
+            <th>保存登記</th><td class="td-center"><span id="out_registration"></span></td>
+            <th>自來水</th><td class="td-center"><span id="out_waterInfo"></span></td>
+        </tr>
+        <tr>
+            <th>拍攝VR</th><td class="td-center"><span id="out_vr"></span></td>
+            <th>車位</th><td colspan="3"><span id="out_parking"></span></td>
+            <th>瓦斯</th><td class="td-center"><span id="out_gas"></span></td>
+        </tr>
+        <tr>
+            <th>售屋動機</th><td class="td-center"><span id="out_sellReason"></span></td>
+            <th>備註</th><td colspan="5"><span id="out_memo"></span></td>
+        </tr>
+        <tr>
+            <th>約看地點</th><td class="td-center"><span id="out_meetPlace"></span></td>
+            <th rowspan="2">銷售重點<br>及訴求</th><td colspan="5" rowspan="2" style="vertical-align: top; height: 80px;"><span id="out_features"></span></td>
+        </tr>
+        <tr>
+            <th>開發/電話</th><td class="td-center"><span id="out_developer"></span> / <span id="out_phone"></span></td>
+        </tr>
+    </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+    document.getElementById('generateBtn').addEventListener('click', function() {
+        const btn = this;
+        const originalText = btn.innerText;
+        
+        // 1. 按鈕狀態改變
+        btn.innerText = '📸 圖片生成中，請稍候...';
+        btn.disabled = true;
+        btn.style.backgroundColor = '#56524D';
+
+        // 2. 搬運純文字欄位
+        const textFields = [
+            'caseId', 'caseName', 'address', 'usage', 'zoning', 'keyStatus', 'structure',
+            'price', 'acquirePrice', 'unitPrice', 'setPrice', 'marketPrice', 'bottomPrice',
+            'totalArea', 'mainArea', 'subArea', 'indoorArea', 'publicArea', 'parkingArea', 'addArea', 'baseArea', 'landShare',
+            'landNumber', 'publicRatio', 'widthDepth', 'roadWidth', 'builder', 'layout', 'floorHeight', 'buildDate', 'totalHouseholds', 'buildPlan', 'elevatorRatio', 'direction', 'communityName', 'managementCompany', 'managementFee', 'school', 'waterInfo',
+            'market', 'park', 'regDate', 'regReason', 'sellReason', 'meetPlace', 'developer', 'phone', 'memo', 'features'
+        ];
+        
+        textFields.forEach(id => {
+            const el = document.getElementById(id);
+            const outEl = document.getElementById('out_' + id);
+            if(el && outEl) outEl.innerText = el.value;
+        });
+
+        // 3. 搬運單選 Radio 欄位
+        const radioGroups = ['type', 'status', 'registration', 'vr', 'gas'];
+        radioGroups.forEach(name => {
+            const checked = document.querySelector(`input[name="${name}"]:checked`);
+            document.getElementById('out_' + name).innerText = checked ? checked.value : '';
+        });
+
+        // 4. 搬運多選 Checkbox 欄位 (將陣列合併成字串)
+        const getCheckedValues = (name) => {
+            let arr = [];
+            document.querySelectorAll(`input[name="${name}"]:checked`).forEach(cb => arr.push(cb.value));
+            return arr.join('、');
+        };
+        document.getElementById('out_parking').innerText = getCheckedValues('parking');
+        document.getElementById('out_facility').innerText = getCheckedValues('facility');
+
+        // 5. 準備截圖 (顯示隱藏表格)
+        const exportArea = document.getElementById('exportArea');
+        exportArea.classList.add('capturing'); 
+
+        // 6. 延遲一下讓瀏覽器渲染排版，然後呼叫 html2canvas
+        setTimeout(() => {
+            html2canvas(exportArea, {
+                scale: 2, // 提高解析度
+                useCORS: true,
+                backgroundColor: '#FFFFFF'
+            }).then(canvas => {
+                const imageURI = canvas.toDataURL('image/png');
+                const caseId = document.getElementById('caseId').value.trim() || '未命名';
+                
+                // 觸發下載
+                const link = document.createElement('a');
+                link.download = `承峰不動產_明細表_${caseId}.png`;
+                link.href = imageURI;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // 7. 復原狀態
+                exportArea.classList.remove('capturing');
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.style.backgroundColor = 'var(--brand-green)';
+            }).catch(err => {
+                alert('圖片產生失敗！請確認瀏覽器支援度。');
+                console.error(err);
+                exportArea.classList.remove('capturing');
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.style.backgroundColor = 'var(--brand-green)';
+            });
+        }, 150);
+    });
+</script>
 
 </body>
 </html>
