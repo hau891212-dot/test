@@ -400,12 +400,11 @@
         const btn = this;
         const originalText = btn.innerText;
         
-        // 1. 按鈕狀態改變
         btn.innerText = '📸 圖片生成中，請稍候...';
         btn.disabled = true;
         btn.style.backgroundColor = '#56524D';
 
-        // 2. 搬運純文字欄位
+        // 搬運資料到隱藏表格 (與原本邏輯相同)
         const textFields = [
             'caseId', 'caseName', 'address', 'usage', 'zoning', 'keyStatus', 'structure',
             'price', 'acquirePrice', 'unitPrice', 'setPrice', 'marketPrice', 'bottomPrice',
@@ -420,14 +419,12 @@
             if(el && outEl) outEl.innerText = el.value;
         });
 
-        // 3. 搬運單選 Radio 欄位
         const radioGroups = ['type', 'status', 'registration', 'vr', 'gas'];
         radioGroups.forEach(name => {
             const checked = document.querySelector(`input[name="${name}"]:checked`);
             document.getElementById('out_' + name).innerText = checked ? checked.value : '';
         });
 
-        // 4. 搬運多選 Checkbox 欄位 (將陣列合併成字串)
         const getCheckedValues = (name) => {
             let arr = [];
             document.querySelectorAll(`input[name="${name}"]:checked`).forEach(cb => arr.push(cb.value));
@@ -436,44 +433,66 @@
         document.getElementById('out_parking').innerText = getCheckedValues('parking');
         document.getElementById('out_facility').innerText = getCheckedValues('facility');
 
-        // 5. 準備截圖 (顯示隱藏表格)
+        // 準備截圖
         const exportArea = document.getElementById('exportArea');
         exportArea.classList.add('capturing'); 
 
-        // 6. 延遲一下讓瀏覽器渲染排版，然後呼叫 html2canvas
         setTimeout(() => {
             html2canvas(exportArea, {
-                scale: 2, // 提高解析度
+                scale: 2, 
                 useCORS: true,
                 backgroundColor: '#FFFFFF'
             }).then(canvas => {
-                const imageURI = canvas.toDataURL('image/png');
                 const caseId = document.getElementById('caseId').value.trim() || '未命名';
-                
-                // 觸發下載
-                const link = document.createElement('a');
-                link.download = `承峰不動產_明細表_${caseId}.png`;
-                link.href = imageURI;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                const fileName = `承峰不動產_明細表_${caseId}.png`;
 
-                // 7. 復原狀態
-                exportArea.classList.remove('capturing');
-                btn.innerText = originalText;
-                btn.disabled = false;
-                btn.style.backgroundColor = 'var(--brand-green)';
+                // 將 Canvas 轉換成 Blob 檔案格式 (分享 API 需要這種格式)
+                canvas.toBlob(function(blob) {
+                    const file = new File([blob], fileName, { type: 'image/png' });
+
+                    // 檢查同事的設備是否支援「原生分享選單」(iOS Safari、Android Chrome 通常都支援)
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        
+                        navigator.share({
+                            files: [file],
+                            title: '物件明細表',
+                            text: `${caseId} 物件明細表`
+                        }).then(() => {
+                            console.log('分享/儲存成功');
+                            resetButton();
+                        }).catch((error) => {
+                            console.log('使用者取消分享', error);
+                            resetButton();
+                        });
+
+                    } else {
+                        // 如果設備太舊或用電腦版，退回原本的「直接下載」模式
+                        const imageURI = canvas.toDataURL('image/png');
+                        const link = document.createElement('a');
+                        link.download = fileName;
+                        link.href = imageURI;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        resetButton();
+                    }
+                }, 'image/png');
+
             }).catch(err => {
                 alert('圖片產生失敗！請確認瀏覽器支援度。');
                 console.error(err);
-                exportArea.classList.remove('capturing');
-                btn.innerText = originalText;
-                btn.disabled = false;
-                btn.style.backgroundColor = 'var(--brand-green)';
+                resetButton();
             });
         }, 150);
+
+        // 恢復按鈕狀態與隱藏表格的共用函數
+        function resetButton() {
+            exportArea.classList.remove('capturing');
+            btn.innerText = originalText;
+            btn.disabled = false;
+            btn.style.backgroundColor = 'var(--brand-green)';
+        }
     });
 </script>
-
 </body>
 </html>
