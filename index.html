@@ -22,37 +22,14 @@
 
         body {
             background-color: var(--bg-color); color: var(--brand-dark); margin: 0;
-            padding: 0; line-height: 1.5; overflow-x: hidden;
+            padding: 20px 15px 120px; line-height: 1.5;
         }
-        
-        .container { max-width: 800px; margin: 0 auto; padding: 20px 15px 120px; display: none; }
-        .container.active { display: block; animation: fadeIn 0.4s ease; }
+        .container { max-width: 800px; margin: 0 auto; }
 
-        /* =========================================
-           2. 歡迎入口畫面
-           ========================================= */
-        #welcomeScreen {
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            min-height: 100vh; background: linear-gradient(135deg, #f0faf3 0%, #ffffff 100%); padding: 20px;
-        }
-        #welcomeScreen.hidden { display: none; }
-        .welcome-logo { max-width: 250px; margin-bottom: 30px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1)); }
-        .welcome-title { font-size: 28px; color: var(--brand-green); margin-bottom: 40px; font-weight: 800; letter-spacing: 2px;}
+        .header { text-align: center; margin-bottom: 20px; }
+        .header img.logo { max-width: 200px; margin-bottom: 12px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .header h1 { color: var(--brand-green); font-size: 24px; margin: 0; font-weight: 800; letter-spacing: 1px;}
         
-        .type-selector { display: flex; gap: 20px; width: 100%; max-width: 600px; flex-wrap: wrap; }
-        .type-btn {
-            flex: 1; min-width: 250px; background: #FFF; border: 2px solid transparent;
-            border-radius: 20px; padding: 40px 20px; text-align: center; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .type-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,122,51,0.15); border-color: var(--brand-green); }
-        .type-btn .icon { font-size: 60px; margin-bottom: 15px; display: block; }
-        .type-btn .title { font-size: 22px; font-weight: bold; color: var(--brand-dark); }
-        
-        .header { text-align: center; margin-bottom: 20px; position: relative;}
-        .header img.logo { max-width: 180px; margin-bottom: 10px; }
-        .btn-home { position: absolute; left: 0; top: 10px; background: #FFF; border: 1px solid #ddd; padding: 8px 12px; border-radius: 8px; cursor: pointer; color: #555; font-weight: bold;}
-
         .top-actions { display: flex; justify-content: flex-end; margin-bottom: 20px; }
         .btn-outline {
             background: #FFF; border: 1.5px solid var(--brand-red); color: var(--brand-red);
@@ -62,7 +39,7 @@
         .btn-outline:active { background: var(--brand-red); color: #FFF; }
 
         /* =========================================
-           3. 表單介面樣式
+           2. 表單介面樣式
            ========================================= */
         .card {
             background: #FFFFFF; border-radius: var(--card-radius); padding: 24px 20px;
@@ -78,7 +55,6 @@
         .form-group { margin-bottom: 18px; }
         label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #4A4A4A; }
         .required::after { content: " *"; color: var(--brand-red); }
-        .internal-tag { color:#d93025; font-size:12px; font-weight:normal; margin-left:8px; }
 
         input[type="text"], input[type="number"], input[type="tel"], textarea, select {
             width: 100%; padding: 14px 16px; border: 1.5px solid #E4E4E4;
@@ -112,8 +88,8 @@
         .other-text-input { display: none; margin-top: 12px; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .dev-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
-        .dev-row input { flex: 1; }
+        .dev-phone-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
+        .dev-phone-row input { flex: 1; }
         .btn-add-row {
             width: 100%; background: transparent; color: var(--brand-green);
             border: 2px dashed var(--brand-green); padding: 14px; font-size: 16px;
@@ -127,7 +103,7 @@
         }
 
         /* =========================================
-           4. 底部懸浮按鈕與預覽 Modal
+           3. 底部懸浮按鈕與預覽 Modal
            ========================================= */
         .fixed-bottom-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
@@ -152,12 +128,8 @@
             background: var(--bg-color); padding: 20px; border-radius: 16px; width: 100%; max-width: 600px;
             max-height: 90vh; overflow-y: auto; text-align: center; position: relative;
         }
-        /* 特別設計預覽圖，確保它是一張可以長按的真圖片 */
-        #previewImg { 
-            width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
-            margin-bottom: 10px; cursor: pointer; user-select: auto; -webkit-touch-callout: default;
-        }
-        .modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        #previewImg { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 20px;}
+        .modal-actions { display: flex; flex-direction: column; gap: 10px; }
         .modal-actions .row-actions { display: flex; gap: 10px; }
         .modal-actions button { flex: 1; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .btn-copy { background: #1B9CFC; color: white; box-shadow: 0 4px 10px rgba(27, 156, 252, 0.3); }
@@ -174,7 +146,7 @@
         .toast.warning { background-color: var(--brand-red); color: white; }
 
         /* =========================================
-           5. 隱藏的輸出表格樣式 (房屋與土地共用基礎)
+           4. 隱藏的輸出表格樣式
            ========================================= */
         .export-wrapper {
             position: absolute; left: -9999px; top: 0; width: 1000px; 
@@ -208,26 +180,26 @@
 
 <div id="toast" class="toast"></div>
 
-<div id="welcomeScreen">
-    <img src="logo.png" alt="永義房屋 Logo" class="welcome-logo" onerror="this.style.display='none'">
-    <div class="welcome-title">請選擇建檔類型</div>
-    <div class="type-selector">
-        <div class="type-btn" onclick="initForm('house')">
-            <span class="icon">🏠</span>
-            <span class="title">房屋類 (大樓/透天/公寓)</span>
-        </div>
-        <div class="type-btn" onclick="initForm('land')">
-            <span class="icon">🏞️</span>
-            <span class="title">土地類 (農地/建地/農舍)</span>
+<div id="previewModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 15px;">👀 請確認明細表內容</h3>
+        <p style="font-size: 14px; color: #666; margin-top: -10px;">內部資訊（如底價/地建號/個資等）已自動隱藏</p>
+        <img id="previewImg" src="" alt="預覽圖">
+        
+        <div class="modal-actions">
+            <button class="btn-copy" id="copyTextBtn">📋 一鍵複製文字文案</button>
+            <div class="row-actions">
+                <button class="btn-back" id="backBtn">返回修改</button>
+                <button class="btn-confirm" id="confirmDownloadBtn">確認無誤並分享圖片</button>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="container" id="mainContainer">
+<div class="container">
     <div class="header">
-        <button class="btn-home" onclick="location.reload()">🔙 回首頁</button>
-        <img src="logo.png" alt="永義房屋 Logo" class="logo" onerror="this.style.display='none'">
-        <h1 id="formTitle">物件明細建檔</h1>
+        <img src="logo.png" alt="永義房屋 Logo" class="logo">
+        <h1>承峰不動產 - 物件明細建檔</h1>
     </div>
 
     <div class="top-actions">
@@ -235,27 +207,37 @@
     </div>
 
     <form id="propertyForm">
+        
+        <div class="card category-selector">
+            <h2 class="card-title">📌 請選擇建檔類型</h2>
+            <div class="chip-group">
+                <input type="radio" name="mainCategory" id="catHouse" value="house" checked>
+                <label class="chip-label" for="catHouse">🏠 房屋類 (大樓/透天/公寓...)</label>
+                <input type="radio" name="mainCategory" id="catLand" value="land">
+                <label class="chip-label" for="catLand">🏞️ 土地類 (農地/建地/農舍)</label>
+            </div>
+        </div>
 
-        <div id="section-house" style="display: none;">
+        <div id="section-house">
             <div class="card">
                 <h2 class="card-title">📝 房屋 - 基本資料</h2>
                 <div class="grid-2">
-                    <div class="form-group"><label class="required" for="caseId">物件編號 <span class="internal-tag">[內部]</span></label><input type="text" id="caseId" class="req-input house-req" placeholder="例：UG1153065"></div>
+                    <div class="form-group"><label class="required" for="caseId">物件編號</label><input type="text" id="caseId" class="req-input house-req" placeholder="例：G2151001"></div>
                     <div class="form-group">
                         <label class="required">委約類型</label>
                         <div class="chip-group">
-                            <input type="radio" name="contract" id="c1" value="專任約"><label class="chip-label" for="c1">專任約</label>
+                            <input type="radio" name="contract" id="c1" value="專任約" checked><label class="chip-label" for="c1">專任約</label>
                             <input type="radio" name="contract" id="c2" value="一般約"><label class="chip-label" for="c2">一般約</label>
                         </div>
                     </div>
                 </div>
-                <div class="form-group"><label class="required" for="caseName">案名</label><input type="text" id="caseName" class="req-input house-req" placeholder="例：享未來三改大二房｜正對棒球場戶型"></div>
-                <div class="form-group"><label class="required" for="address">地址 <span class="internal-tag">[內部]</span></label><input type="text" id="address" class="req-input house-req" placeholder="完整地址"></div>
+                <div class="form-group"><label class="required" for="caseName">案名</label><input type="text" id="caseName" class="req-input house-req" placeholder="例：合總2期商業區兩房"></div>
+                <div class="form-group"><label class="required" for="address">地址</label><input type="text" id="address" class="req-input house-req" placeholder="完整地址"></div>
                 <div class="grid-2">
                     <div class="form-group">
                         <label class="required">類型</label>
                         <div class="chip-group">
-                            <input type="radio" name="type" id="t1" value="大樓"><label class="chip-label" for="t1">大樓</label>
+                            <input type="radio" name="type" id="t1" value="大樓" checked><label class="chip-label" for="t1">大樓</label>
                             <input type="radio" name="type" id="t2" value="透天"><label class="chip-label" for="t2">透天</label>
                             <input type="radio" name="type" id="t3" value="公寓"><label class="chip-label" for="t3">公寓</label>
                             <input type="radio" name="type" id="t_other" value="其他"><label class="chip-label" for="t_other">其他</label>
@@ -265,7 +247,7 @@
                     <div class="form-group">
                         <label class="required">物件現況</label>
                         <div class="chip-group">
-                            <input type="radio" name="status" id="s1" value="空屋"><label class="chip-label" for="s1">空屋</label>
+                            <input type="radio" name="status" id="s1" value="空屋" checked><label class="chip-label" for="s1">空屋</label>
                             <input type="radio" name="status" id="s2" value="自用"><label class="chip-label" for="s2">自用</label>
                             <input type="radio" name="status" id="s3" value="預售"><label class="chip-label" for="s3">預售</label>
                             <input type="radio" name="status" id="s4" value="租賃中"><label class="chip-label" for="s4">租賃</label>
@@ -273,42 +255,42 @@
                     </div>
                 </div>
                 <div class="grid-2">
-                    <div class="form-group"><label for="usage">主要用途</label><input type="text" id="usage" placeholder="例：集合住宅"></div>
+                    <div class="form-group"><label for="usage">物件用途</label><input type="text" id="usage" placeholder="例：集合住宅"></div>
                     <div class="form-group"><label for="zoning">使用分區</label><input type="text" id="zoning" placeholder="例：商業區"></div>
                 </div>
-                <div class="form-group"><label for="keyStatus">交付鑰匙 <span class="internal-tag">[內部]</span></label><input type="text" id="keyStatus" placeholder="例：密碼"></div>
+                <div class="form-group"><label for="keyStatus">交付鑰匙 (內部資訊)</label><input type="text" id="keyStatus" placeholder="例：密碼 (不會出現在圖片)"></div>
             </div>
 
             <div class="card">
-                <h2 class="card-title">💰 價格與面積</h2>
+                <h2 class="card-title">💰 價格資訊 (單位：萬)</h2>
                 <div class="grid-3">
-                    <div class="form-group"><label class="required" for="price">委託價 (萬)</label><input type="text" inputmode="decimal" id="price" class="req-input house-req format-num" placeholder="例：990"></div>
-                    <div class="form-group"><label for="acquirePrice">取得價格 (萬) <span class="internal-tag">[內部]</span></label><input type="text" inputmode="decimal" id="acquirePrice" class="format-num" placeholder="例：800"></div>
-                    <div class="form-group"><label for="unitPrice">單坪 (萬)</label><input type="text" id="unitPrice" class="readonly-input format-num" placeholder="自動計算" readonly></div>
-                    <div class="form-group"><label for="setPrice">設定價 (萬) <span class="internal-tag">[內部]</span></label><input type="text" inputmode="decimal" id="setPrice" class="format-num" placeholder="例：900"></div>
-                    <div class="form-group"><label for="bottomPrice">可談價 (萬) <span class="internal-tag">[內部]</span></label><input type="text" inputmode="decimal" id="bottomPrice" class="format-num" placeholder="例：950"></div>
+                    <div class="form-group"><label class="required" for="price">委託價</label><input type="text" inputmode="decimal" id="price" class="req-input house-req format-num" placeholder="輸入總價"></div>
+                    <div class="form-group"><label for="acquirePrice">取得價格</label><input type="text" inputmode="decimal" id="acquirePrice" class="format-num"></div>
+                    <div class="form-group"><label for="unitPrice">單坪 (自動計算)</label><input type="text" id="unitPrice" class="readonly-input format-num" placeholder="自動計算" readonly></div>
+                    <div class="form-group"><label for="setPrice">設定價</label><input type="text" inputmode="decimal" id="setPrice" class="format-num"></div>
+                    <div class="form-group"><label for="bottomPrice">可談價 (內部資訊)</label><input type="text" inputmode="decimal" id="bottomPrice" class="format-num" placeholder="不出現在圖片"></div>
                 </div>
             </div>
 
             <div class="card">
                 <h2 class="card-title">📏 坪數與土地</h2>
                 <div class="grid-3">
-                    <div class="form-group"><label class="required" for="totalArea">總坪數</label><input type="number" step="0.01" id="totalArea" class="req-input house-req" placeholder="例：29.49"></div>
-                    <div class="form-group"><label for="mainArea">主建坪數</label><input type="number" step="0.01" id="mainArea" placeholder="例：18.50"></div>
-                    <div class="form-group"><label for="subArea">附屬坪數</label><input type="number" step="0.01" id="subArea" placeholder="例：2.19"></div>
-                    <div class="form-group"><label for="indoorArea">室內坪數</label><input type="number" step="0.01" id="indoorArea" placeholder="主建+附屬"></div>
-                    <div class="form-group"><label for="publicArea">公設坪數</label><input type="number" step="0.01" id="publicArea" placeholder="例：8.79"></div>
-                    <div class="form-group"><label for="parkingArea">車位坪數</label><input type="number" step="0.01" id="parkingArea" placeholder="例：0"></div>
-                    <div class="form-group"><label for="addArea">加建</label><input type="number" step="0.01" id="addArea" placeholder="例：0"></div>
-                    <div class="form-group"><label for="baseArea">基地坪數</label><input type="number" step="0.01" id="baseArea" placeholder="例：0"></div>
-                    <div class="form-group"><label for="landShare">地坪(持分)</label><input type="text" id="landShare" placeholder="例：3.5"></div>
+                    <div class="form-group"><label class="required" for="totalArea">總坪數</label><input type="number" step="0.01" id="totalArea" class="req-input house-req" placeholder="輸入以計算單價"></div>
+                    <div class="form-group"><label for="mainArea">主建物</label><input type="number" step="0.01" id="mainArea"></div>
+                    <div class="form-group"><label for="subArea">附屬建物</label><input type="number" step="0.01" id="subArea"></div>
+                    <div class="form-group"><label for="indoorArea">室內坪數</label><input type="number" step="0.01" id="indoorArea"></div>
+                    <div class="form-group"><label for="publicArea">公設坪數</label><input type="number" step="0.01" id="publicArea"></div>
+                    <div class="form-group"><label for="parkingArea">車位坪數</label><input type="number" step="0.01" id="parkingArea"></div>
+                    <div class="form-group"><label for="addArea">加建</label><input type="number" step="0.01" id="addArea"></div>
+                    <div class="form-group"><label for="baseArea">基地坪數</label><input type="number" step="0.01" id="baseArea"></div>
+                    <div class="form-group"><label for="landShare">地坪(持分)</label><input type="text" id="landShare"></div>
                 </div>
                 <div class="grid-2" style="border-top: 1px dashed #eee; padding-top: 16px; margin-top: 10px;">
-                    <div class="form-group"><label for="landNo">地號 <span class="internal-tag">[內部]</span></label><input type="text" id="landNo" placeholder="例：建國段123號"></div>
-                    <div class="form-group"><label for="buildNo">建號 <span class="internal-tag">[內部]</span></label><input type="text" id="buildNo" placeholder="例：456號"></div>
+                    <div class="form-group"><label for="landNo">地號 (內部資訊)</label><input type="text" id="landNo" placeholder="不出現在圖片"></div>
+                    <div class="form-group"><label for="buildNo">建號 (內部資訊)</label><input type="text" id="buildNo" placeholder="不出現在圖片"></div>
                 </div>
                 <div class="grid-3">
-                    <div class="form-group"><label for="publicRatio">公設比</label><input type="text" id="publicRatio" placeholder="例：30%"></div>
+                    <div class="form-group"><label for="publicRatio">公設比</label><input type="text" id="publicRatio" placeholder="例：33.20%"></div>
                     <div class="form-group"><label for="width">面寬</label><input type="text" id="width" placeholder="例：5米"></div>
                     <div class="form-group"><label for="depth">深度</label><input type="text" id="depth" placeholder="例：15米"></div>
                     <div class="form-group"><label for="roadWidth">路寬</label><input type="text" id="roadWidth" placeholder="例：6米"></div>
@@ -318,37 +300,37 @@
             <div class="card">
                 <h2 class="card-title">🏢 建築、社區與格局</h2>
                 <div class="grid-2">
-                    <div class="form-group"><label for="builder">建設公司</label><input type="text" id="builder" placeholder="例：OO建設"></div>
-                    <div class="form-group"><label for="communityName">社區名稱</label><input type="text" id="communityName" placeholder="例：享未來"></div>
+                    <div class="form-group"><label for="builder">建設公司</label><input type="text" id="builder"></div>
+                    <div class="form-group"><label for="communityName">社區名稱</label><input type="text" id="communityName"></div>
                 </div>
                 <div class="grid-2">
-                    <div class="form-group"><label for="layout">格局</label><input type="text" id="layout" placeholder="例：2房、2廳、2衛、2陽台"></div>
-                    <div class="form-group"><label for="floorHeight">樓高</label><input type="text" id="floorHeight" placeholder="例：位於3樓/總共15樓"></div>
-                    <div class="form-group"><label for="buildDate">建築完成日</label><input type="text" id="buildDate" placeholder="例：民國114年09月12日"></div>
-                    <div class="form-group"><label for="totalHouseholds">總戶數</label><input type="text" id="totalHouseholds" placeholder="例：170戶"></div>
-                    <div class="form-group"><label for="buildPlan">建築規劃</label><input type="text" id="buildPlan" placeholder="例：地上15層/地下2層"></div>
+                    <div class="form-group"><label for="layout">格局</label><input type="text" id="layout" placeholder="例：2房2廳1衛1陽台"></div>
+                    <div class="form-group"><label for="floorHeight">樓高</label><input type="text" id="floorHeight"></div>
+                    <div class="form-group"><label for="buildDate">建築完成日</label><input type="text" id="buildDate" placeholder="例：114年05月13日"></div>
+                    <div class="form-group"><label for="totalHouseholds">總戶數</label><input type="text" id="totalHouseholds"></div>
+                    <div class="form-group"><label for="buildPlan">建築規劃</label><input type="text" id="buildPlan" placeholder="例：地上14層/地下2層/位於4樓"></div>
                     <div class="form-group"><label for="elevatorRatio">電梯 / 單層</label><input type="text" id="elevatorRatio" placeholder="例：2梯8戶"></div>
-                    <div class="form-group"><label for="managementCompany">管理維護公司</label><input type="text" id="managementCompany" placeholder="例：OO物業"></div>
-                    <div class="form-group"><label for="managementFee">管理費</label><input type="text" id="managementFee" placeholder="例：2000元/月"></div>
-                    <div class="form-group"><label for="structure">主要建材</label><input type="text" id="structure" placeholder="例：RC"></div>
+                    <div class="form-group"><label for="managementCompany">管理維護公司</label><input type="text" id="managementCompany"></div>
+                    <div class="form-group"><label for="managementFee">管理費</label><input type="text" id="managementFee"></div>
+                    <div class="form-group"><label for="structure">主要結構</label><input type="text" id="structure" placeholder="例：RC"></div>
                 </div>
                 <div class="grid-3" style="border-top: 1px dashed #eee; padding-top: 16px; margin-top: 10px;">
                     <div class="form-group"><label for="dirManagement">朝向(管理室)</label><input type="text" id="dirManagement" placeholder="例：朝南"></div>
-                    <div class="form-group"><label for="dirDoor">朝向(大門)</label><input type="text" id="dirDoor" placeholder="例：朝西北"></div>
-                    <div class="form-group"><label for="dirWindow">朝向(落地窗)</label><input type="text" id="dirWindow" placeholder="例：朝東北"></div>
+                    <div class="form-group"><label for="dirDoor">朝向(大門)</label><input type="text" id="dirDoor" placeholder="例：朝東"></div>
+                    <div class="form-group"><label for="dirWindow">朝向(落地窗)</label><input type="text" id="dirWindow" placeholder="例：朝西"></div>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
                         <label>建物是否保存登記</label>
                         <div class="chip-group">
-                            <input type="radio" name="registration" id="reg1" value="是"><label class="chip-label" for="reg1">是</label>
+                            <input type="radio" name="registration" id="reg1" value="是" checked><label class="chip-label" for="reg1">是</label>
                             <input type="radio" name="registration" id="reg2" value="否"><label class="chip-label" for="reg2">否</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>自來水</label>
                         <div class="chip-group">
-                            <input type="radio" name="water" id="w1" value="有"><label class="chip-label" for="w1">有</label>
+                            <input type="radio" name="water" id="w1" value="有" checked><label class="chip-label" for="w1">有</label>
                             <input type="radio" name="water" id="w2" value="無"><label class="chip-label" for="w2">無</label>
                         </div>
                     </div>
@@ -371,13 +353,13 @@
                     <label>瓦斯</label>
                     <div class="chip-group">
                         <input type="radio" name="gas" id="g1" value="桶裝"><label class="chip-label" for="g1">桶裝</label>
-                        <input type="radio" name="gas" id="g2" value="天然氣"><label class="chip-label" for="g2">天然氣</label>
+                        <input type="radio" name="gas" id="g2" value="天然氣" checked><label class="chip-label" for="g2">天然氣</label>
                         <input type="radio" name="gas" id="g3" value="其他"><label class="chip-label" for="g3">其他</label>
                     </div>
                     <input type="text" id="gasOtherText" class="other-text-input" placeholder="請輸入其他瓦斯來源 (例：IH爐)">
                 </div>
                 <div class="form-group">
-                    <label>公設項目 (可多選)</label>
+                    <label>公設 (可多選)</label>
                     <div class="chip-group">
                         <input type="checkbox" name="facility" id="f1" value="交誼廳"><label class="chip-label" for="f1">交誼廳</label>
                         <input type="checkbox" name="facility" id="f2" value="閱覽室"><label class="chip-label" for="f2">閱覽室</label>
@@ -395,13 +377,15 @@
             <div class="card">
                 <h2 class="card-title">📍 周邊與行銷</h2>
                 <div class="grid-2">
-                    <div class="form-group"><label for="school">學區</label><input type="text" id="school" placeholder="例：公誠國小"></div>
-                    <div class="form-group"><label for="market">鄰近市場</label><input type="text" id="market" placeholder="例：西平路商圈"></div>
-                    <div class="form-group"><label for="park">鄰近公園</label><input type="text" id="park" placeholder="例：棒球場"></div>
-                    <div class="form-group"><label for="sellReason">售屋動機</label><input type="text" id="sellReason" placeholder="例：換屋"></div>
+                    <div class="form-group"><label for="school">學區</label><input type="text" id="school"></div>
+                    <div class="form-group"><label for="market">鄰近市場</label><input type="text" id="market"></div>
+                    <div class="form-group"><label for="park">鄰近公園</label><input type="text" id="park"></div>
+                    <div class="form-group"><label for="sellReason">售屋動機</label><input type="text" id="sellReason"></div>
+                    <div class="form-group"><label for="regDate">登記日期 (內部)</label><input type="text" id="regDate" placeholder="不出現在圖片"></div>
+                    <div class="form-group"><label for="regReason">登記原因 (內部)</label><input type="text" id="regReason" placeholder="不出現在圖片"></div>
                     <div class="form-group"><label for="meetPlace">約看地點 (內部)</label><input type="text" id="meetPlace" placeholder="不出現在圖片"></div>
                 </div>
-                <div class="form-group"><label for="memo">備註</label><textarea id="memo" placeholder="例：看屋需提前一天"></textarea></div>
+                <div class="form-group"><label for="memo">備註</label><textarea id="memo"></textarea></div>
                 <div class="form-group"><label for="features">產品特色 (多行填寫)</label><textarea id="features" placeholder="1. 格局方正...&#10;2. 採光佳..."></textarea></div>
             </div>
         </div>
@@ -410,11 +394,11 @@
             <div class="card">
                 <h2 class="card-title">📝 土地 - 基本資料</h2>
                 <div class="grid-2">
-                    <div class="form-group"><label class="required" for="l_caseId">物件編號 <span class="internal-tag">[內部]</span></label><input type="text" id="l_caseId" class="req-input land-req" placeholder="例：L2151001"></div>
+                    <div class="form-group"><label class="required" for="l_caseId">物件編號</label><input type="text" id="l_caseId" class="req-input land-req" placeholder="例：L2151001"></div>
                     <div class="form-group">
                         <label class="required">委約類型</label>
                         <div class="chip-group">
-                            <input type="radio" name="l_contract" id="lc1" value="專任約"><label class="chip-label" for="lc1">專任約</label>
+                            <input type="radio" name="l_contract" id="lc1" value="專任約" checked><label class="chip-label" for="lc1">專任約</label>
                             <input type="radio" name="l_contract" id="lc2" value="一般約"><label class="chip-label" for="lc2">一般約</label>
                         </div>
                     </div>
@@ -423,27 +407,27 @@
                 <div class="form-group">
                     <label class="required">土地類型</label>
                     <div class="chip-group">
-                        <input type="radio" name="l_type" id="lt1" value="農地"><label class="chip-label" for="lt1">農地</label>
+                        <input type="radio" name="l_type" id="lt1" value="農地" checked><label class="chip-label" for="lt1">農地</label>
                         <input type="radio" name="l_type" id="lt2" value="建地"><label class="chip-label" for="lt2">建地</label>
                         <input type="radio" name="l_type" id="lt3" value="農舍"><label class="chip-label" for="lt3">農舍</label>
                     </div>
                 </div>
                 <div class="grid-2" style="border-top: 1px dashed #eee; padding-top: 16px; margin-top: 10px;">
-                    <div class="form-group"><label for="l_landNo">地號 <span class="internal-tag">[內部]</span></label><input type="text" id="l_landNo" placeholder="例：建國段123號"></div>
-                    <div class="form-group"><label for="l_sharedLandNo">持分地號 <span class="internal-tag">[內部]</span></label><input type="text" id="l_sharedLandNo" placeholder="例：無"></div>
+                    <div class="form-group"><label for="l_landNo">地號 (內部資訊)</label><input type="text" id="l_landNo" placeholder="不出現在圖片"></div>
+                    <div class="form-group"><label for="l_sharedLandNo">持分地號 (內部資訊)</label><input type="text" id="l_sharedLandNo" placeholder="不出現在圖片"></div>
                 </div>
             </div>
 
             <div class="card">
                 <h2 class="card-title">💰 價格與面積</h2>
                 <div class="grid-3">
-                    <div class="form-group"><label class="required" for="l_price">銷售價格 (萬)</label><input type="text" inputmode="decimal" id="l_price" class="req-input land-req format-num" placeholder="例：1200"></div>
-                    <div class="form-group"><label for="l_unitPricePing">每坪單價 (萬)</label><input type="text" id="l_unitPricePing" class="readonly-input format-num" placeholder="自動計算" readonly></div>
-                    <div class="form-group"><label for="l_unitPriceFen">每分單價 (萬)</label><input type="text" id="l_unitPriceFen" class="readonly-input format-num" placeholder="自動計算" readonly></div>
+                    <div class="form-group"><label class="required" for="l_price">銷售價格 (萬)</label><input type="text" inputmode="decimal" id="l_price" class="req-input land-req format-num"></div>
+                    <div class="form-group"><label for="l_unitPricePing">每坪單價 (自動)</label><input type="text" id="l_unitPricePing" class="readonly-input format-num" readonly></div>
+                    <div class="form-group"><label for="l_unitPriceFen">每分單價 (自動)</label><input type="text" id="l_unitPriceFen" class="readonly-input format-num" readonly></div>
                     
-                    <div class="form-group"><label class="required" for="l_totalArea">總地坪</label><input type="number" step="0.01" id="l_totalArea" class="req-input land-req" placeholder="例：350"></div>
-                    <div class="form-group"><label for="l_actualArea">實際土地坪數</label><input type="number" step="0.01" id="l_actualArea" placeholder="例：320"></div>
-                    <div class="form-group"><label for="l_sharedArea">持分坪數</label><input type="number" step="0.01" id="l_sharedArea" placeholder="例：30"></div>
+                    <div class="form-group"><label class="required" for="l_totalArea">總地坪</label><input type="number" step="0.01" id="l_totalArea" class="req-input land-req"></div>
+                    <div class="form-group"><label for="l_actualArea">實際土地坪數</label><input type="number" step="0.01" id="l_actualArea"></div>
+                    <div class="form-group"><label for="l_sharedArea">持分坪數</label><input type="number" step="0.01" id="l_sharedArea"></div>
                 </div>
             </div>
 
@@ -464,59 +448,38 @@
             <div class="card">
                 <h2 class="card-title">📋 土地狀況與行銷</h2>
                 <div class="grid-2">
-                    <div class="form-group"><label for="l_nav">導航 (截取Google)</label><input type="text" id="l_nav" placeholder="請貼上網址"></div>
+                    <div class="form-group"><label for="l_nav">導航 (截取Google)</label><input type="text" id="l_nav" placeholder="例：貼上網址或地標名"></div>
                     <div class="form-group"><label for="l_zoning">使用分區</label><input type="text" id="l_zoning" placeholder="例：特定農業區"></div>
                     <div class="form-group"><label for="l_landCategory">使用地類別</label><input type="text" id="l_landCategory" placeholder="例：農牧用地"></div>
-                    <div class="form-group"><label for="l_nationalPlan">國土計畫分區</label><input type="text" id="l_nationalPlan" placeholder="例：農業發展地區"></div>
+                    <div class="form-group"><label for="l_nationalPlan">國土計畫分區</label><input type="text" id="l_nationalPlan"></div>
                     <div class="form-group"><label for="l_mappingCert">有無套匯證明</label><input type="text" id="l_mappingCert" placeholder="例：無"></div>
                     <div class="form-group"><label for="l_buildingLine">有無申請建築線</label><input type="text" id="l_buildingLine" placeholder="例：無"></div>
+                    
+                    <div class="form-group"><label for="l_regDate">登記日期 (內部資訊)</label><input type="text" id="l_regDate" placeholder="不出現在圖片"></div>
+                    <div class="form-group"><label for="l_regReason">登記原因 (內部資訊)</label><input type="text" id="l_regReason" placeholder="不出現在圖片"></div>
                 </div>
-                <div class="form-group"><label for="l_features">產品特色</label><textarea id="l_features" placeholder="1. &#10;2. &#10;3. "></textarea></div>
+                <div class="form-group"><label for="l_features">產品特色</label><textarea id="l_features" placeholder="1. &#10;2. &#10;3. &#10;4. &#10;5. "></textarea></div>
             </div>
         </div>
 
-        <div class="card" id="internalSection" style="border-top: 4px solid var(--brand-red); display: none;">
-            <h2 class="card-title">👤 內部專用資訊 (不會出現在圖片上)</h2>
-            <div class="grid-2">
-                <div class="form-group"><label for="regReason">登記原因</label><input type="text" id="regReason" placeholder="例：買賣"></div>
-                <div class="form-group"><label for="taxRate">房地合一稅</label><input type="text" id="taxRate" placeholder="例：45%"></div>
-                <div class="form-group"><label for="serviceFee">服務費</label><input type="text" id="serviceFee" placeholder="例：4%"></div>
-                <div class="form-group"><label for="middleFee">是否有中人費</label><input type="text" id="middleFee" placeholder="例：無"></div>
-                <div class="form-group"><label for="hallPassword">大廳密碼</label><input type="text" id="hallPassword" placeholder="例：帶看聯繫開發索取"></div>
-                <div class="form-group"><label for="doorPassword">入戶密碼</label><input type="text" id="doorPassword" placeholder="例：123456#"></div>
-            </div>
-            
-            <h3 style="font-size: 15px; margin-top: 20px; border-top: 1px dashed #ddd; padding-top: 15px;">開發人員</h3>
-            <div id="devList">
-                <div class="dev-row">
-                    <input type="text" class="req-input dev-name" placeholder="開發姓名 (例：小峰)">
+        <div class="card" style="border-top: 4px solid var(--brand-red);">
+            <h2 class="card-title">👤 開發人員資訊 (內部建檔 - 圖片中隱藏)</h2>
+            <div class="dev-section">
+                <div id="devList">
+                    <div class="dev-phone-row">
+                        <input type="text" class="req-input dev-input" placeholder="開發姓名">
+                        <input type="tel" class="req-input phone-input" placeholder="09XX-XXX-XXX" maxlength="12">
+                    </div>
                 </div>
+                <button type="button" class="btn-add-row" id="addDevBtn">＋ 新增開發人員</button>
             </div>
-            <button type="button" class="btn-add-row" onclick="addDevRow()">＋ 新增開發人員</button>
         </div>
 
     </form>
 </div>
 
-<div class="fixed-bottom-bar" id="bottomBar" style="display: none;">
+<div class="fixed-bottom-bar">
     <button type="button" class="submit-btn" id="generateBtn">產生明細表圖檔</button>
-</div>
-
-<div id="previewModal" class="modal">
-    <div class="modal-content">
-        <h3 style="margin-bottom: 15px;">👀 請確認明細表內容</h3>
-        <p style="font-size: 14px; color: #666; margin-top: -10px;">內部資訊（如底價/地建號/個資等）已自動隱藏</p>
-        <img id="previewImg" src="" alt="預覽圖">
-        <p style="font-size: 13px; color: var(--brand-green); font-weight: bold; margin-bottom: 15px;">💡 提示：若點擊下方按鈕無反應(如 LINE 內建瀏覽器)，請直接長按上方圖片儲存。</p>
-        
-        <div class="modal-actions">
-            <button class="btn-copy" id="copyTextBtn">📋 一鍵複製圖文文案</button>
-            <div class="row-actions">
-                <button class="btn-back" onclick="document.getElementById('previewModal').classList.remove('show')">返回修改</button>
-                <button class="btn-confirm" id="confirmDownloadBtn">分享圖片</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div id="exportAreaHouse" class="export-wrapper">
@@ -561,7 +524,7 @@
             <th>電梯/單層</th><td class="td-center"><span id="out_elevatorRatio"></span></td>
         </tr>
         <tr>
-            <th>主要建材</th><td class="td-center"><span id="out_structure"></span></td>
+            <th>主要結構</th><td class="td-center"><span id="out_structure"></span></td>
             <th>樓高</th><td class="td-center"><span id="out_floorHeight"></span></td>
             <th>公設比</th><td class="td-center"><span id="out_publicRatio"></span></td>
             <th>建築完成日</th><td class="td-center"><span id="out_buildDate"></span></td>
@@ -663,27 +626,23 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-    let currentType = ''; 
-    let currentImageBase64 = null; // 改用 Base64 作為跨平台核心
+    let currentImageBlob = null;
     let currentFileName = '';
+    let currentCategory = 'house';
 
     // --- UX: 區段切換 (房屋 vs 土地) ---
-    function initForm(type) {
-        currentType = type;
-        document.getElementById('welcomeScreen').classList.add('hidden');
-        document.getElementById('mainContainer').classList.add('active');
-        document.getElementById('bottomBar').style.display = 'flex';
-        document.getElementById('internalSection').style.display = 'block'; 
-        
-        if(type === 'house') {
-            document.getElementById('section-house').style.display = 'block';
-            document.getElementById('section-land').style.display = 'none';
-        } else {
-            document.getElementById('section-house').style.display = 'none';
-            document.getElementById('section-land').style.display = 'block';
-        }
-        loadFormData();
-    }
+    document.querySelectorAll('input[name="mainCategory"]').forEach(r => {
+        r.addEventListener('change', (e) => {
+            currentCategory = e.target.value;
+            if(currentCategory === 'house') {
+                document.getElementById('section-house').style.display = 'block';
+                document.getElementById('section-land').style.display = 'none';
+            } else {
+                document.getElementById('section-house').style.display = 'none';
+                document.getElementById('section-land').style.display = 'block';
+            }
+        });
+    });
 
     // --- UX: Toast 提示功能 ---
     function showToast(message, isWarning = false) {
@@ -694,17 +653,30 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
+    // --- UX: 電話自動格式化 ---
+    function formatPhone(e) {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,4})(\d{0,3})(\d{0,3})/);
+        if (!x[1]) { e.target.value = ''; return; }
+        e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+    }
+    document.querySelector('.phone-input').addEventListener('input', formatPhone);
+
     // --- UX: 動態新增開發人員 ---
-    function addDevRow() {
+    document.getElementById('addDevBtn').addEventListener('click', function() {
         const container = document.getElementById('devList');
         const row = document.createElement('div');
-        row.className = 'dev-row';
+        row.className = 'dev-phone-row';
         row.innerHTML = `
-            <input type="text" class="req-input dev-name" placeholder="開發姓名">
-            <button type="button" class="btn-remove-row" onclick="this.closest('.dev-row').remove(); saveFormData();">✕</button>
+            <input type="text" class="req-input dev-input" placeholder="開發姓名">
+            <input type="tel" class="req-input phone-input" placeholder="09XX-XXX-XXX" maxlength="12">
+            <button type="button" class="btn-remove-row">✕</button>
         `;
         container.appendChild(row);
-    }
+        row.querySelector('.phone-input').addEventListener('input', formatPhone);
+        row.querySelector('.btn-remove-row').addEventListener('click', function() { 
+            row.remove(); saveFormData(); 
+        });
+    });
 
     document.body.addEventListener('input', function(e) {
         if (e.target.classList.contains('req-input')) e.target.classList.remove('input-error');
@@ -762,6 +734,7 @@
         });
     });
 
+    // 車位防呆
     let parkingWarned = false;
     document.querySelectorAll('input[name="parking"]').forEach(cb => {
         cb.addEventListener('change', function() {
@@ -775,14 +748,12 @@
                     parkingWarned = true; 
                 } else {
                     this.checked = false;
-                    if(this.id === 'p_other') {
-                        document.getElementById('parkingOtherText').style.display = 'none';
-                        document.getElementById('parkingOtherText').value = '';
-                    }
+                    if(this.id === 'p_other') { document.getElementById('parkingOtherText').style.display = 'none'; }
                 }
             }
         });
     });
+
     document.getElementById('f_other').addEventListener('change', function() {
         document.getElementById('facilityOtherText').style.display = this.checked ? 'block' : 'none';
         if(!this.checked) document.getElementById('facilityOtherText').value = '';
@@ -790,37 +761,39 @@
 
 
     // =========================================
-    // ✨ 自動儲存 (LocalStorage) - 獨立儲存兩分類
+    // ✨ 自動儲存 (LocalStorage)
     // =========================================
     function saveFormData() {
-        if(!currentType) return;
-        const formData = { standard: {}, dynamicDevs: [] };
+        const formData = { category: currentCategory, standard: {}, dynamicDevs: [] };
         
-        const sectionId = currentType === 'house' ? 'section-house' : 'section-land';
-        const els = document.querySelectorAll(`#${sectionId} input, #${sectionId} textarea, #internalSection input, #internalSection textarea`);
-        
-        els.forEach(el => {
-            if (el.classList.contains('dev-name')) return;
+        document.querySelectorAll('input, textarea, select').forEach(el => {
+            if (el.name === 'mainCategory') return;
+            if (el.classList.contains('dev-input') || el.classList.contains('phone-input')) return;
             if (el.id) {
                 if (el.type === 'radio' || el.type === 'checkbox') formData.standard[el.id] = el.checked;
                 else formData.standard[el.id] = el.value;
             }
         });
 
-        document.querySelectorAll('.dev-row').forEach(row => {
+        document.querySelectorAll('.dev-phone-row').forEach(row => {
             formData.dynamicDevs.push({
-                name: row.querySelector('.dev-name').value
+                name: row.querySelector('.dev-input').value,
+                phone: row.querySelector('.phone-input').value
             });
         });
-        localStorage.setItem(`propertyFormData_v11_${currentType}`, JSON.stringify(formData));
-        localStorage.setItem(`propertyFormData_v11_lastType`, currentType); 
+        localStorage.setItem('propertyFormData_v2', JSON.stringify(formData));
     }
 
     function loadFormData() {
-        const saved = localStorage.getItem(`propertyFormData_v11_${currentType}`);
+        const saved = localStorage.getItem('propertyFormData_v2');
         if (saved) {
             const formData = JSON.parse(saved);
             
+            if(formData.category) {
+                const catRadio = document.querySelector(`input[name="mainCategory"][value="${formData.category}"]`);
+                if(catRadio) { catRadio.checked = true; catRadio.dispatchEvent(new Event('change')); }
+            }
+
             for (const key in formData.standard) {
                 const el = document.getElementById(key);
                 if (el) {
@@ -838,36 +811,32 @@
             if(formData.dynamicDevs && formData.dynamicDevs.length > 0) {
                 formData.dynamicDevs.forEach(dev => {
                     const row = document.createElement('div');
-                    row.className = 'dev-row';
+                    row.className = 'dev-phone-row';
                     row.innerHTML = `
-                        <input type="text" class="req-input dev-name" placeholder="開發姓名" value="${dev.name}">
-                        <button type="button" class="btn-remove-row" onclick="this.closest('.dev-row').remove(); saveFormData();">✕</button>
+                        <input type="text" class="req-input dev-input" placeholder="開發姓名" value="${dev.name}">
+                        <input type="tel" class="req-input phone-input" placeholder="09XX-XXX-XXX" maxlength="12" value="${dev.phone}">
+                        <button type="button" class="btn-remove-row">✕</button>
                     `;
                     devList.appendChild(row);
+                    row.querySelector('.phone-input').addEventListener('input', formatPhone);
+                    row.querySelector('.btn-remove-row').addEventListener('click', function() { row.remove(); saveFormData(); });
                 });
             } else {
-                addDevRow();
+                document.getElementById('addDevBtn').click();
             }
 
-            if(currentType === 'house') calculateUnitPriceHouse();
-            if(currentType === 'land') calculateUnitPriceLand();
+            calculateUnitPriceHouse();
+            calculateUnitPriceLand();
         }
     }
 
     document.getElementById('propertyForm').addEventListener('input', saveFormData);
     document.getElementById('propertyForm').addEventListener('change', saveFormData);
-    
-    // 網頁載入時，直接顯示首頁入口
-    window.addEventListener('load', function() {
-        document.getElementById('welcomeScreen').classList.remove('hidden');
-        document.getElementById('mainContainer').classList.remove('active');
-    });
+    window.addEventListener('load', loadFormData);
 
     document.getElementById('clearDataBtn').addEventListener('click', function() {
         if(confirm('確定要清除所有填寫的資料嗎？')) {
-            localStorage.removeItem(`propertyFormData_v11_house`);
-            localStorage.removeItem(`propertyFormData_v11_land`);
-            localStorage.removeItem(`propertyFormData_v11_lastType`);
+            localStorage.removeItem('propertyFormData_v2');
             location.reload(); 
         }
     });
@@ -878,123 +847,33 @@
     document.getElementById('copyTextBtn').addEventListener('click', function() {
         let textTemplate = '';
         
-        let devNames = [];
-        document.querySelectorAll('.dev-row').forEach(row => {
-            let n = row.querySelector('.dev-name').value.trim();
-            if(n) devNames.push(n);
+        let devInfos = [];
+        document.querySelectorAll('.dev-phone-row').forEach(row => {
+            let n = row.querySelector('.dev-input').value.trim();
+            let p = row.querySelector('.phone-input').value.trim();
+            if(n || p) devInfos.push(`${n} ${p}`);
         });
 
-        if (currentType === 'house') {
+        if (currentCategory === 'house') {
             const caseName = document.getElementById('caseName').value || '未填寫案名';
-            const price = document.getElementById('price').value || '';
-            const layout = document.getElementById('layout').value || '';
-            const totalArea = document.getElementById('totalArea').value || '';
+            const address = document.getElementById('address').value || '未填寫地址';
+            const price = document.getElementById('price').value || '0';
+            const totalArea = document.getElementById('totalArea').value || '0';
+            const layout = document.getElementById('layout').value || '未填寫';
+            const features = document.getElementById('features').value || '無';
             
-            let areas = [];
-            if(document.getElementById('mainArea').value) areas.push(`主建物${document.getElementById('mainArea').value}`);
-            if(document.getElementById('subArea').value) areas.push(`陽台${document.getElementById('subArea').value}`);
-            if(document.getElementById('publicArea').value) areas.push(`公設${document.getElementById('publicArea').value}`);
-            
-            textTemplate += `【${caseName}】\n`;
-            if(price) textTemplate += `售價：${price}萬\n`;
-            if(layout) textTemplate += `格局：${layout}\n`;
-            if(totalArea) textTemplate += `權狀：${totalArea}坪\n`;
-            if(areas.length > 0) textTemplate += `(${areas.join('+')})\n`;
-            
-            const getCbValues = (n, oId) => {
-                let arr = [];
-                document.querySelectorAll(`input[name="${n}"]:checked`).forEach(cb => {
-                    arr.push(cb.value === '其他' ? (document.getElementById(oId).value.trim() || '其他') : cb.value);
-                });
-                return arr.join('、');
-            };
-
-            const park = getCbValues('parking', 'parkingOtherText');
-            const floor = document.getElementById('floorHeight').value;
-            if(park || floor) textTemplate += `車位：${park||'無'} 樓層：${floor||''}\n`;
-            
-            if(document.getElementById('dirDoor').value) textTemplate += `家大門朝向：${document.getElementById('dirDoor').value}\n`;
-            if(document.getElementById('dirWindow').value) textTemplate += `落地窗朝向：${document.getElementById('dirWindow').value}\n`;
-            
-            const gasChecked = document.querySelector('input[name="gas"]:checked');
-            let gasStr = gasChecked ? (gasChecked.value === '其他' ? document.getElementById('gasOtherText').value : gasChecked.value) : '';
-            if(gasStr) textTemplate += `瓦斯：${gasStr}\n`;
-            
-            if(document.getElementById('totalHouseholds').value) textTemplate += `總戶數：${document.getElementById('totalHouseholds').value}\n`;
-            
-            textTemplate += `-------------------------\n`;
-            if(document.getElementById('buildDate').value) textTemplate += `建築完成日：${document.getElementById('buildDate').value}\n`;
-            if(document.getElementById('regReason').value) textTemplate += `登記原因：${document.getElementById('regReason').value}\n`;
-            if(document.getElementById('taxRate').value) textTemplate += `房地合一稅：${document.getElementById('taxRate').value}\n`;
-            if(document.getElementById('structure').value) textTemplate += `主要建材：${document.getElementById('structure').value}\n`;
-            if(document.getElementById('usage').value) textTemplate += `主要用途：${document.getElementById('usage').value}\n`;
-            if(document.getElementById('zoning').value) textTemplate += `使用分區：${document.getElementById('zoning').value}\n`;
-            
-            if(document.getElementById('features').value) {
-                textTemplate += `-------------------------\n『產品特色』\n${document.getElementById('features').value}\n`;
-            }
-
-            textTemplate += `-------------------------\n⚠️以下請勿複製⚠️\n`;
-            if(document.getElementById('caseId').value) textTemplate += `物件編號：${document.getElementById('caseId').value}\n`;
-            if(document.getElementById('address').value) textTemplate += `地址：${document.getElementById('address').value}\n`;
-            if(devNames.length > 0) textTemplate += `開發：${devNames.join('、')}\n`;
-            if(document.getElementById('serviceFee').value) textTemplate += `服務費：${document.getElementById('serviceFee').value}\n`;
-            if(document.getElementById('middleFee').value) textTemplate += `是否有中人費：${document.getElementById('middleFee').value}\n`;
-            if(document.getElementById('hallPassword').value) textTemplate += `大廳密碼：${document.getElementById('hallPassword').value}\n`;
-            if(document.getElementById('doorPassword').value) textTemplate += `入戶密碼：${document.getElementById('doorPassword').value}\n`;
+            textTemplate = `【${caseName}】\n地址：${address}\n委託價：${price} 萬\n總建坪：${totalArea} 坪\n格局：${layout}\n\n【物件亮點】\n${features}\n\n歡迎來電賞屋：\n${devInfos.join('\n')}\n永義房屋 成功莊敬店`;
         
         } else {
-            // 土地文案
             const caseName = document.getElementById('l_caseName').value || '未填寫案名';
-            const ltype = document.querySelector('input[name="l_type"]:checked');
-            const lcontract = document.querySelector('input[name="l_contract"]:checked');
+            const nav = document.getElementById('l_nav').value || '未提供';
+            const price = document.getElementById('l_price').value || '0';
+            const totalArea = document.getElementById('l_totalArea').value || '0';
+            const unitPing = document.getElementById('l_unitPricePing').value || '0';
+            const unitFen = document.getElementById('l_unitPriceFen').value || '0';
+            const features = document.getElementById('l_features').value || '無';
             
-            if(ltype) textTemplate += `【${ltype.value}】 `;
-            textTemplate += `${caseName}\n`;
-            if(document.getElementById('l_caseId').value) textTemplate += `物件編號：${document.getElementById('l_caseId').value}\n`;
-            if(lcontract) textTemplate += `合約：${lcontract.value}\n`;
-            
-            textTemplate += `-------------------------\n『基本資料』\n`;
-            if(document.getElementById('l_landNo').value) textTemplate += `地號：${document.getElementById('l_landNo').value}\n`;
-            if(document.getElementById('l_sharedLandNo').value) textTemplate += `持分地號：${document.getElementById('l_sharedLandNo').value}\n`;
-            if(document.getElementById('l_price').value) textTemplate += `銷售價格：${document.getElementById('l_price').value}萬\n`;
-            if(document.getElementById('l_unitPriceFen').value) textTemplate += `每分：${document.getElementById('l_unitPriceFen').value}萬\n`;
-            if(document.getElementById('l_unitPricePing').value) textTemplate += `每坪：${document.getElementById('l_unitPricePing').value}萬\n`;
-
-            textTemplate += `-------------------------\n『土地現況』\n`;
-            if(document.getElementById('l_totalArea').value) textTemplate += `總地坪：${document.getElementById('l_totalArea').value}坪\n`;
-            if(document.getElementById('l_actualArea').value) textTemplate += `實際土地坪數：${document.getElementById('l_actualArea').value}坪\n`;
-            if(document.getElementById('l_sharedArea').value) textTemplate += `持分坪數：${document.getElementById('l_sharedArea').value}坪\n`;
-            if(document.getElementById('l_width').value) textTemplate += `面寬約：${document.getElementById('l_width').value}\n`;
-            if(document.getElementById('l_depth').value) textTemplate += `深度約：${document.getElementById('l_depth').value}\n`;
-            if(document.getElementById('l_road').value) textTemplate += `臨路：${document.getElementById('l_road').value}\n`;
-            if(document.getElementById('l_direction').value) textTemplate += `座向：${document.getElementById('l_direction').value}\n`;
-            if(document.getElementById('l_structure').value) textTemplate += `地上物：${document.getElementById('l_structure').value}\n`;
-            if(document.getElementById('l_rented').value) textTemplate += `是否租借：${document.getElementById('l_rented').value}\n`;
-            if(document.getElementById('l_water').value) textTemplate += `用水概況：${document.getElementById('l_water').value}\n`;
-            if(document.getElementById('l_electricity').value) textTemplate += `用電概況：${document.getElementById('l_electricity').value}\n`;
-
-            textTemplate += `-------------------------\n導航: ${document.getElementById('l_nav').value || ''}\n`;
-            
-            textTemplate += `-------------------------\n『土地狀況』\n`;
-            if(document.getElementById('regReason').value) textTemplate += `登記原因：${document.getElementById('regReason').value}\n`;
-            if(document.getElementById('l_zoning').value) textTemplate += `使用分區：${document.getElementById('l_zoning').value}\n`;
-            if(document.getElementById('l_landCategory').value) textTemplate += `使用地類別：${document.getElementById('l_landCategory').value}\n`;
-            if(document.getElementById('l_nationalPlan').value) textTemplate += `國土計畫分區：${document.getElementById('l_nationalPlan').value}\n`;
-            if(document.getElementById('l_mappingCert').value) textTemplate += `有無套匯證明：${document.getElementById('l_mappingCert').value}\n`;
-            if(document.getElementById('l_buildingLine').value) textTemplate += `有無申請建築線：${document.getElementById('l_buildingLine').value}\n`;
-
-            if(document.getElementById('l_features').value) {
-                textTemplate += `-------------------------\n『產品特色』\n${document.getElementById('l_features').value}\n`;
-            }
-
-            textTemplate += `-------------------------\n⚠️以下請勿複製⚠️\n`;
-            if(devNames.length > 0) textTemplate += `開發：${devNames.join('、')}\n`;
-            ['serviceFee','middleFee'].forEach(id => {
-                const el = document.getElementById(id);
-                const label = id === 'serviceFee' ? '服務費' : '是否有中人費';
-                if(el && el.value) textTemplate += `${label}：${el.value}\n`;
-            });
+            textTemplate = `【${caseName}】\n導航：${nav}\n銷售價格：${price} 萬\n總地坪：${totalArea} 坪\n(每坪約 ${unitPing} 萬 / 每分約 ${unitFen} 萬)\n\n【產品特色】\n${features}\n\n歡迎來電賞地：\n${devInfos.join('\n')}\n永義房屋 成功莊敬店`;
         }
 
         if (navigator.clipboard) {
@@ -1009,18 +888,16 @@
     });
 
     // =========================================
-    // 產圖預覽流程 (全新無敵 Base64 下載引擎)
+    // 產圖預覽流程 (分區擷取)
     // =========================================
     document.getElementById('generateBtn').addEventListener('click', function() {
         let hasError = false;
-        // 依照目前顯示的區段，抓取 req-input 進行防呆
-        const reqClass = currentType === 'house' ? '.house-req' : '.land-req';
+        const reqClass = currentCategory === 'house' ? '.house-req' : '.land-req';
         document.querySelectorAll(reqClass).forEach(input => {
             if (input.value.trim() === '') { input.classList.add('input-error'); hasError = true; }
         });
 
-        // 檢查共用的開發人員姓名
-        document.querySelectorAll('.dev-name').forEach(input => {
+        document.querySelectorAll('.dev-input, .phone-input').forEach(input => {
             if (input.value.trim() === '') { input.classList.add('input-error'); hasError = true; }
         });
 
@@ -1038,7 +915,7 @@
         
         let exportAreaId = '';
 
-        if (currentType === 'house') {
+        if (currentCategory === 'house') {
             exportAreaId = 'exportAreaHouse';
             const textFields = ['caseId', 'caseName', 'address', 'usage', 'zoning', 'structure', 'price', 'acquirePrice', 'unitPrice', 'setPrice', 'totalArea', 'mainArea', 'subArea', 'indoorArea', 'publicArea', 'parkingArea', 'addArea', 'baseArea', 'landShare', 'publicRatio', 'width', 'depth', 'roadWidth', 'builder', 'layout', 'floorHeight', 'buildDate', 'totalHouseholds', 'buildPlan', 'elevatorRatio', 'dirManagement', 'dirDoor', 'dirWindow', 'communityName', 'managementCompany', 'managementFee', 'school', 'market', 'park', 'sellReason', 'memo', 'features'];
             
@@ -1073,7 +950,6 @@
             document.getElementById('out_facility').innerText = getCbValues('facility', 'facilityOtherText');
 
         } else {
-            // 處理土地表單邏輯
             exportAreaId = 'exportAreaLand';
             const l_textFields = ['caseId', 'caseName', 'nav', 'price', 'unitPricePing', 'unitPriceFen', 'totalArea', 'actualArea', 'sharedArea', 'width', 'depth', 'road', 'direction', 'structure', 'rented', 'water', 'electricity', 'zoning', 'landCategory', 'nationalPlan', 'mappingCert', 'buildingLine', 'features'];
             
@@ -1092,21 +968,20 @@
             document.getElementById('out_l_metaDate').innerText = dateStr;
         }
 
-        // 開始截圖
         const exportArea = document.getElementById(exportAreaId);
         exportArea.classList.add('capturing'); 
 
         setTimeout(() => {
             html2canvas(exportArea, { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' }).then(canvas => {
-                const caseId = currentType === 'house' ? document.getElementById('caseId').value.trim() : document.getElementById('l_caseId').value.trim();
+                const caseId = currentCategory === 'house' ? document.getElementById('caseId').value.trim() : document.getElementById('l_caseId').value.trim();
                 currentFileName = `永義房屋_明細表_${caseId || '未命名'}.png`;
 
-                // 取出 Base64 高畫質字串
-                currentImageBase64 = canvas.toDataURL('image/png');
-                document.getElementById('previewImg').src = currentImageBase64;
-                document.getElementById('previewModal').classList.add('show');
-                
-                resetButton();
+                canvas.toBlob(function(blob) {
+                    currentImageBlob = blob;
+                    document.getElementById('previewImg').src = URL.createObjectURL(blob);
+                    document.getElementById('previewModal').classList.add('show');
+                    resetButton();
+                }, 'image/png');
             }).catch(err => {
                 showToast('產生失敗，請稍後再試！', true);
                 resetButton();
@@ -1125,55 +1000,21 @@
         document.getElementById('previewModal').classList.remove('show');
     });
 
-    // --- 終極下載引擎 (Base64 -> Native / A Tag Fallback) ---
-    document.getElementById('confirmDownloadBtn').addEventListener('click', async function() {
-        if (!currentImageBase64) return;
+    document.getElementById('confirmDownloadBtn').addEventListener('click', function() {
+        if (!currentImageBlob) return;
+        const file = new File([currentImageBlob], currentFileName, { type: 'image/png' });
 
-        // 轉換 Base64 成為原生 Blob (比 Canvas.toBlob 更穩定)
-        function dataURItoBlob(dataURI) {
-            const byteString = atob(dataURI.split(',')[1]);
-            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-            const ab = new ArrayBuffer(byteString.length);
-            const ia = new Uint8Array(ab);
-            for (let i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
-            }
-            return new Blob([ab], {type: mimeString});
-        }
-
-        try {
-            const blob = dataURItoBlob(currentImageBase64);
-            const file = new File([blob], currentFileName, { type: 'image/png' });
-
-            // 1. 嘗試使用原生分享 (iOS/Android Share Sheet)
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    files: [file],
-                    title: '物件明細表',
-                    text: `物件明細表送出`
-                });
-                document.getElementById('previewModal').classList.remove('show');
-                return;
-            } else {
-                throw new Error("CanShare is false");
-            }
-        } catch (error) {
-            // 如果是被使用者取消 (AbortError)，就不做動作
-            if (error.name === 'AbortError') return;
-
-            // 2. 退回使用傳統的 a 標籤下載機制
-            try {
-                const link = document.createElement('a');
-                link.href = currentImageBase64;
-                link.download = currentFileName;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showToast('圖片已下載！若沒看到請長按圖片。');
-            } catch (fallbackError) {
-                // 3. 極端環境 (被 LINE 完全阻擋)，提示長按
-                showToast('請直接「長按上方圖片」儲存至手機！', true);
-            }
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({ files: [file], title: '物件明細表', text: `物件明細表送出` })
+            .then(() => document.getElementById('previewModal').classList.remove('show'))
+            .catch(() => console.log('分享取消'));
+        } else {
+            const link = document.createElement('a');
+            link.download = currentFileName; 
+            link.href = URL.createObjectURL(currentImageBlob);
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            showToast('圖片已下載！');
+            document.getElementById('previewModal').classList.remove('show');
         }
     });
 </script>
