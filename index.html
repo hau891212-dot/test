@@ -59,19 +59,7 @@
             box-shadow: 0 0 0 4px rgba(0, 122, 51, 0.1); transform: translateY(-1px);
         }
         
-        /* 防呆錯誤紅框 */
         .input-error { border-color: var(--brand-red) !important; background-color: #FFF0F0 !important; }
-
-        /* 動態新增按鈕列 */
-        .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
-        .btn-icon {
-            background-color: var(--brand-green); color: white; border: none;
-            border-radius: var(--input-radius); width: 48px; font-size: 24px; font-weight: bold;
-            cursor: pointer; display: flex; justify-content: center; align-items: center;
-            transition: 0.2s; flex-shrink: 0;
-        }
-        .btn-icon:active { transform: scale(0.95); }
-        .btn-icon.btn-remove { background-color: var(--brand-red); }
 
         .chip-group { display: flex; flex-wrap: wrap; gap: 10px; }
         .chip-group input[type="radio"], .chip-group input[type="checkbox"] { display: none; }
@@ -91,6 +79,23 @@
         @media (max-width: 600px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
         #gasOtherText { display: none; margin-top: 12px; }
 
+        /* 動態新增開發人員區塊樣式 */
+        .dev-section { background: #FAFAFA; padding: 16px; border-radius: 12px; border: 1px solid #E4E4E4; }
+        .dev-phone-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
+        .dev-phone-row input { flex: 1; }
+        .btn-add-row {
+            width: 100%; background: transparent; color: var(--brand-green);
+            border: 2px dashed var(--brand-green); padding: 14px; font-size: 16px;
+            font-weight: bold; border-radius: 12px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-add-row:active { background: rgba(0, 122, 51, 0.05); transform: scale(0.98); }
+        .btn-remove-row {
+            background-color: var(--brand-red); color: white; border: none;
+            border-radius: 50%; width: 32px; height: 32px; font-size: 18px; line-height: 1;
+            cursor: pointer; display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(200, 16, 46, 0.3);
+        }
+
         /* =========================================
            3. 底部懸浮按鈕與預覽 Modal
            ========================================= */
@@ -108,7 +113,6 @@
         }
         .submit-btn:active { transform: translateY(2px); box-shadow: 0 2px 8px rgba(0, 122, 51, 0.2); }
 
-        /* 預覽視窗樣式 */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center;
@@ -122,13 +126,10 @@
         .modal-content h3 { margin-top: 0; color: var(--brand-dark); }
         #previewImg { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
-        .modal-actions button {
-            flex: 1; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
-        }
+        .modal-actions button { flex: 1; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .btn-back { background: #E0E0E0; color: #333; }
         .btn-confirm { background: var(--brand-yellow); color: var(--brand-dark); }
 
-        /* Toast 提示框 */
         .toast {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
             background-color: #333; color: #FFF; padding: 14px 24px; border-radius: 50px;
@@ -334,20 +335,19 @@
                 <div class="form-group"><label for="regReason">登記原因</label><input type="text" id="regReason"></div>
                 <div class="form-group"><label for="sellReason">售屋動機</label><input type="text" id="sellReason"></div>
                 <div class="form-group"><label for="meetPlace">約看地點</label><input type="text" id="meetPlace"></div>
-                
-                <div class="form-group" id="devContainer">
-                    <label class="required">開發</label>
-                    <div class="input-row">
-                        <input type="text" class="req-input dev-input" placeholder="開發人員 1">
-                        <button type="button" class="btn-icon" id="addDevBtn">+</button>
+            </div>
+
+            <div class="form-group dev-section">
+                <label class="required" style="margin-bottom: 12px;">開發人員與聯絡電話</label>
+                <div id="devList">
+                    <div class="dev-phone-row">
+                        <input type="text" class="req-input dev-input" placeholder="開發姓名">
+                        <input type="tel" class="req-input phone-input" placeholder="09XX-XXX-XXX" maxlength="12">
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <label class="required" for="phone">聯絡電話</label>
-                    <input type="tel" id="phone" class="req-input" placeholder="09XX-XXX-XXX" maxlength="12">
-                </div>
+                <button type="button" class="btn-add-row" id="addDevBtn">＋ 新增開發人員</button>
             </div>
+
             <div class="form-group"><label for="memo">備註</label><textarea id="memo"></textarea></div>
             <div class="form-group"><label for="features">銷售重點及訴求重點</label><textarea id="features"></textarea></div>
         </div>
@@ -470,34 +470,46 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // --- UX: 電話號碼自動格式化 (09XX-XXX-XXX) ---
-    document.getElementById('phone').addEventListener('input', function(e) {
-        // 移除非數字
+    // --- UX: 電話號碼自動格式化共用模組 (09XX-XXX-XXX) ---
+    function formatPhone(e) {
         let x = e.target.value.replace(/\D/g, '').match(/(\d{0,4})(\d{0,3})(\d{0,3})/);
         if (!x[1]) {
             e.target.value = '';
             return;
         }
-        // 組裝格式
         e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
-    });
+    }
+    
+    // 綁定第一組電話欄位
+    document.querySelector('.phone-input').addEventListener('input', formatPhone);
 
-    // --- UX: 動態新增開發人員 ---
+    // --- UX: 動態新增開發人員與電話 ---
     document.getElementById('addDevBtn').addEventListener('click', function() {
-        const container = document.getElementById('devContainer');
-        const rowCount = container.querySelectorAll('.input-row').length + 1;
+        const container = document.getElementById('devList');
         
         const row = document.createElement('div');
-        row.className = 'input-row';
+        row.className = 'dev-phone-row';
         row.innerHTML = `
-            <input type="text" class="dev-input" placeholder="開發人員 ${rowCount}">
-            <button type="button" class="btn-icon btn-remove">-</button>
+            <input type="text" class="req-input dev-input" placeholder="開發姓名">
+            <input type="tel" class="req-input phone-input" placeholder="09XX-XXX-XXX" maxlength="12">
+            <button type="button" class="btn-remove-row">✕</button>
         `;
         container.appendChild(row);
         
-        row.querySelector('.btn-remove').addEventListener('click', function() {
+        // 為新產生的電話欄位綁定自動格式化功能
+        row.querySelector('.phone-input').addEventListener('input', formatPhone);
+        
+        // 刪除按鈕功能
+        row.querySelector('.btn-remove-row').addEventListener('click', function() {
             row.remove();
         });
+    });
+
+    // --- 全域點擊防呆紅框解除 ---
+    document.body.addEventListener('input', function(e) {
+        if (e.target.classList.contains('req-input')) {
+            e.target.classList.remove('input-error');
+        }
     });
 
     // --- UX: 價格千分位逗號 ---
@@ -566,8 +578,6 @@
             if (input.value.trim() === '') {
                 input.classList.add('input-error');
                 hasError = true;
-            } else {
-                input.classList.remove('input-error');
             }
         });
 
@@ -589,7 +599,7 @@
             'price', 'acquirePrice', 'unitPrice', 'setPrice', 'marketPrice', 'bottomPrice',
             'totalArea', 'mainArea', 'subArea', 'indoorArea', 'publicArea', 'parkingArea', 'addArea', 'baseArea', 'landShare',
             'landNumber', 'publicRatio', 'widthDepth', 'roadWidth', 'builder', 'layout', 'floorHeight', 'buildDate', 'totalHouseholds', 'buildPlan', 'elevatorRatio', 'direction', 'communityName', 'managementCompany', 'managementFee', 'school',
-            'market', 'park', 'regDate', 'regReason', 'sellReason', 'meetPlace', 'phone', 'memo', 'features'
+            'market', 'park', 'regDate', 'regReason', 'sellReason', 'meetPlace', 'memo', 'features'
         ];
         
         textFields.forEach(id => {
@@ -598,14 +608,17 @@
             if(el && outEl) outEl.innerText = el.value; 
         });
 
-        // 處理多位開發人員
-        const devInputs = Array.from(document.querySelectorAll('.dev-input'))
-                               .map(input => input.value.trim())
-                               .filter(val => val !== '');
+        // 處理多位開發人員與電話
+        const devInputs = Array.from(document.querySelectorAll('.dev-input')).map(i => i.value.trim()).filter(v => v);
+        const phoneInputs = Array.from(document.querySelectorAll('.phone-input')).map(i => i.value.trim()).filter(v => v);
+        
         const devString = devInputs.join('、');
+        const phoneString = phoneInputs.join('、');
+        
         document.getElementById('out_developer').innerText = devString;
+        document.getElementById('out_phone').innerText = phoneString;
 
-        // 寫入壓印日期與開發人
+        // 寫入壓印日期與浮水印開發人
         const today = new Date();
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -685,12 +698,6 @@
             showToast('圖片已下載！');
             document.getElementById('previewModal').classList.remove('show');
         }
-    });
-
-    document.querySelectorAll('.req-input').forEach(input => {
-        input.addEventListener('input', function() {
-            this.classList.remove('input-error');
-        });
     });
 </script>
 
