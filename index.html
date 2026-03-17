@@ -30,19 +30,18 @@
 
         .container { max-width: 800px; margin: 0 auto; }
 
+        /* Logo 與標題區塊 */
         .header { text-align: center; margin-bottom: 24px; }
-        .header h1 { color: var(--brand-green); font-size: 26px; margin: 0; }
+        .header img.logo { max-width: 220px; margin-bottom: 12px; height: auto; }
+        .header h1 { color: var(--brand-green); font-size: 24px; margin: 0; letter-spacing: 1px;}
         .header p { color: var(--brand-dark); font-size: 14px; margin-top: 5px; opacity: 0.8; }
 
         /* =========================================
-           2. 表單介面樣式 (手機版優先設計)
+           2. 表單介面樣式
            ========================================= */
         .card {
-            background: #FFFFFF;
-            border-radius: var(--card-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background: #FFFFFF; border-radius: var(--card-radius); padding: 20px;
+            margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border-top: 4px solid var(--brand-yellow); 
         }
 
@@ -92,16 +91,22 @@
         }
         .submit-btn:active { transform: translateY(2px); }
 
+        /* 隱藏的瓦斯輸入框動畫 */
+        #gasOtherText {
+            display: none;
+            margin-top: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
         /* =========================================
            3. 隱藏的輸出表格樣式 (截圖專用版面)
            ========================================= */
         .export-wrapper {
-            position: absolute; left: -9999px; top: 0; /* 平常隱藏在視窗外 */
-            width: 1000px; /* 固定產生圖片的寬度，確保排版不跑位 */
+            position: absolute; left: -9999px; top: 0; width: 1000px; 
             background-color: #FFFFFF; padding: 40px;
             border: 2px solid #56524D; border-radius: 12px;
         }
-        /* 截圖時瞬間叫回畫面 */
         .export-wrapper.capturing { position: relative; left: 0; z-index: -1; margin-bottom: 20px;}
 
         .export-header-title {
@@ -110,15 +115,10 @@
             padding-bottom: 15px; margin-bottom: 20px; letter-spacing: 2px;
         }
         
-        .export-table {
-            width: 100%; border-collapse: collapse; font-size: 17px; color: #111;
-        }
-        .export-table th, .export-table td {
-            border: 1px solid #56524D; padding: 12px 10px; text-align: left; vertical-align: middle;
-        }
+        .export-table { width: 100%; border-collapse: collapse; font-size: 17px; color: #111; }
+        .export-table th, .export-table td { border: 1px solid #56524D; padding: 12px 10px; text-align: left; vertical-align: middle; }
         .export-table th { background-color: #f2f2f2; font-weight: bold; color: var(--brand-dark); text-align: center; white-space: nowrap; }
         
-        /* 表格細節排版微調 */
         .td-center { text-align: center !important; }
         .text-red { color: var(--brand-red); font-weight: bold; }
     </style>
@@ -127,6 +127,7 @@
 
 <div class="container">
     <div class="header">
+        <img src="logo.png" alt="永義房屋 Logo" class="logo">
         <h1>承峰不動產 - 物件明細建檔</h1>
         <p>請填寫物件資訊，系統將自動生成專業表格圖檔</p>
     </div>
@@ -136,19 +137,10 @@
         <div class="card">
             <h2 class="card-title">📝 基本資料</h2>
             <div class="grid-2">
-                <div class="form-group">
-                    <label class="required" for="caseId">物件編號</label>
-                    <input type="text" id="caseId" placeholder="例：G2151001">
-                </div>
-                <div class="form-group">
-                    <label class="required" for="caseName">案名</label>
-                    <input type="text" id="caseName" placeholder="例：合總2期商業區兩房">
-                </div>
+                <div class="form-group"><label class="required" for="caseId">物件編號</label><input type="text" id="caseId" placeholder="例：G2151001"></div>
+                <div class="form-group"><label class="required" for="caseName">案名</label><input type="text" id="caseName" placeholder="例：合總2期商業區兩房"></div>
             </div>
-            <div class="form-group">
-                <label class="required" for="address">地址</label>
-                <input type="text" id="address" placeholder="完整地址">
-            </div>
+            <div class="form-group"><label class="required" for="address">地址</label><input type="text" id="address" placeholder="完整地址"></div>
             <div class="grid-2">
                 <div class="form-group">
                     <label class="required">類型</label>
@@ -228,27 +220,25 @@
                 <div class="form-group"><label for="school">學區</label><input type="text" id="school"></div>
             </div>
             
-            <div class="form-group">
-                <label>建物是否保存登記</label>
-                <div class="chip-group">
-                    <input type="radio" name="registration" id="reg1" value="是" checked><label class="chip-label" for="reg1">是</label>
-                    <input type="radio" name="registration" id="reg2" value="否"><label class="chip-label" for="reg2">否</label>
-                </div>
-            </div>
             <div class="grid-2">
-                <div class="form-group"><label for="waterInfo">自來水</label><input type="text" id="waterInfo" placeholder="例：V"></div>
                 <div class="form-group">
-                    <label>瓦斯</label>
+                    <label>建物是否保存登記</label>
                     <div class="chip-group">
-                        <input type="radio" name="gas" id="g1" value="桶裝"><label class="chip-label" for="g1">桶裝</label>
-                        <input type="radio" name="gas" id="g2" value="天然氣" checked><label class="chip-label" for="g2">天然氣</label>
-                        <input type="radio" name="gas" id="g3" value="其他"><label class="chip-label" for="g3">其他</label>
+                        <input type="radio" name="registration" id="reg1" value="是" checked><label class="chip-label" for="reg1">是</label>
+                        <input type="radio" name="registration" id="reg2" value="否"><label class="chip-label" for="reg2">否</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>自來水</label>
+                    <div class="chip-group">
+                        <input type="radio" name="water" id="w1" value="有" checked><label class="chip-label" for="w1">有</label>
+                        <input type="radio" name="water" id="w2" value="無"><label class="chip-label" for="w2">無</label>
                     </div>
                 </div>
             </div>
             
             <div class="form-group">
-                <label>車位類型</label>
+                <label>車位類型 (防呆：僅限單選)</label>
                 <div class="chip-group">
                     <input type="checkbox" name="parking" id="p1" value="坡道"><label class="chip-label" for="p1">坡道</label>
                     <input type="checkbox" name="parking" id="p2" value="平面"><label class="chip-label" for="p2">平面</label>
@@ -258,6 +248,16 @@
                     <input type="checkbox" name="parking" id="p6" value="下層"><label class="chip-label" for="p6">下層</label>
                     <input type="checkbox" name="parking" id="p7" value="無"><label class="chip-label" for="p7">無</label>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label>瓦斯</label>
+                <div class="chip-group">
+                    <input type="radio" name="gas" id="g1" value="桶裝"><label class="chip-label" for="g1">桶裝</label>
+                    <input type="radio" name="gas" id="g2" value="天然氣" checked><label class="chip-label" for="g2">天然氣</label>
+                    <input type="radio" name="gas" id="g3" value="其他"><label class="chip-label" for="g3">其他</label>
+                </div>
+                <input type="text" id="gasOtherText" placeholder="請輸入其他瓦斯來源 (例：電磁爐/未牽管)">
             </div>
 
             <div class="form-group">
@@ -285,13 +285,6 @@
                 <div class="form-group"><label for="meetPlace">約看地點</label><input type="text" id="meetPlace"></div>
                 <div class="form-group"><label for="developer">開發</label><input type="text" id="developer"></div>
                 <div class="form-group"><label for="phone">聯絡電話</label><input type="text" id="phone"></div>
-            </div>
-            <div class="form-group">
-                <label>拍攝VR</label>
-                <div class="chip-group">
-                    <input type="radio" name="vr" id="v1" value="是"><label class="chip-label" for="v1">是</label>
-                    <input type="radio" name="vr" id="v2" value="否" checked><label class="chip-label" for="v2">否</label>
-                </div>
             </div>
             <div class="form-group"><label for="memo">備註</label><textarea id="memo"></textarea></div>
             <div class="form-group"><label for="features">銷售重點及訴求重點</label><textarea id="features"></textarea></div>
@@ -373,12 +366,11 @@
         <tr>
             <th>公設項目</th><td colspan="3"><span id="out_facility"></span></td>
             <th>保存登記</th><td class="td-center"><span id="out_registration"></span></td>
-            <th>自來水</th><td class="td-center"><span id="out_waterInfo"></span></td>
+            <th>自來水</th><td class="td-center"><span id="out_water"></span></td>
         </tr>
         <tr>
-            <th>拍攝VR</th><td class="td-center"><span id="out_vr"></span></td>
             <th>車位</th><td colspan="3"><span id="out_parking"></span></td>
-            <th>瓦斯</th><td class="td-center"><span id="out_gas"></span></td>
+            <th>瓦斯</th><td colspan="3" class="td-center"><span id="out_gas"></span></td>
         </tr>
         <tr>
             <th>售屋動機</th><td class="td-center"><span id="out_sellReason"></span></td>
@@ -396,20 +388,46 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
+    // --- 1. 車位防呆機制 (限制單選) ---
+    document.querySelectorAll('input[name="parking"]').forEach(cb => {
+        cb.addEventListener('change', function() {
+            const checkedCount = document.querySelectorAll('input[name="parking"]:checked').length;
+            if (checkedCount > 1) {
+                alert('⚠️ 提醒：車位類型通常只需選擇一種！\n若有多種車位組合，請在「備註」欄位詳細說明。');
+                this.checked = false; // 取消剛剛勾選的選項
+            }
+        });
+    });
+
+    // --- 2. 瓦斯「其他」動態顯示輸入框 ---
+    document.querySelectorAll('input[name="gas"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const otherInput = document.getElementById('gasOtherText');
+            if (this.id === 'g3') { // 如果選了"其他"
+                otherInput.style.display = 'block';
+                otherInput.focus();
+            } else {
+                otherInput.style.display = 'none';
+                otherInput.value = ''; // 清空輸入框
+            }
+        });
+    });
+
+    // --- 3. 產圖與分享引擎 ---
     document.getElementById('generateBtn').addEventListener('click', function() {
         const btn = this;
         const originalText = btn.innerText;
         
-        btn.innerText = '📸 圖片生成中，請稍候...';
+        btn.innerText = '📸 圖片排版中，請稍候...';
         btn.disabled = true;
         btn.style.backgroundColor = '#56524D';
 
-        // 搬運資料到隱藏表格 (與原本邏輯相同)
+        // 搬運純文字資料
         const textFields = [
             'caseId', 'caseName', 'address', 'usage', 'zoning', 'keyStatus', 'structure',
             'price', 'acquirePrice', 'unitPrice', 'setPrice', 'marketPrice', 'bottomPrice',
             'totalArea', 'mainArea', 'subArea', 'indoorArea', 'publicArea', 'parkingArea', 'addArea', 'baseArea', 'landShare',
-            'landNumber', 'publicRatio', 'widthDepth', 'roadWidth', 'builder', 'layout', 'floorHeight', 'buildDate', 'totalHouseholds', 'buildPlan', 'elevatorRatio', 'direction', 'communityName', 'managementCompany', 'managementFee', 'school', 'waterInfo',
+            'landNumber', 'publicRatio', 'widthDepth', 'roadWidth', 'builder', 'layout', 'floorHeight', 'buildDate', 'totalHouseholds', 'buildPlan', 'elevatorRatio', 'direction', 'communityName', 'managementCompany', 'managementFee', 'school',
             'market', 'park', 'regDate', 'regReason', 'sellReason', 'meetPlace', 'developer', 'phone', 'memo', 'features'
         ];
         
@@ -419,12 +437,26 @@
             if(el && outEl) outEl.innerText = el.value;
         });
 
-        const radioGroups = ['type', 'status', 'registration', 'vr', 'gas'];
+        // 搬運標準單選資料 (VR已移除)
+        const radioGroups = ['type', 'status', 'registration', 'water'];
         radioGroups.forEach(name => {
             const checked = document.querySelector(`input[name="${name}"]:checked`);
             document.getElementById('out_' + name).innerText = checked ? checked.value : '';
         });
 
+        // 特別處理瓦斯邏輯 (如果是其他，抓取輸入框的值)
+        const gasChecked = document.querySelector('input[name="gas"]:checked');
+        let gasOutput = '';
+        if (gasChecked) {
+            if (gasChecked.value === '其他') {
+                gasOutput = document.getElementById('gasOtherText').value || '其他';
+            } else {
+                gasOutput = gasChecked.value;
+            }
+        }
+        document.getElementById('out_gas').innerText = gasOutput;
+
+        // 搬運多選資料
         const getCheckedValues = (name) => {
             let arr = [];
             document.querySelectorAll(`input[name="${name}"]:checked`).forEach(cb => arr.push(cb.value));
@@ -446,27 +478,22 @@
                 const caseId = document.getElementById('caseId').value.trim() || '未命名';
                 const fileName = `承峰不動產_明細表_${caseId}.png`;
 
-                // 將 Canvas 轉換成 Blob 檔案格式 (分享 API 需要這種格式)
+                // iOS 手機分享 API
                 canvas.toBlob(function(blob) {
                     const file = new File([blob], fileName, { type: 'image/png' });
 
-                    // 檢查同事的設備是否支援「原生分享選單」(iOS Safari、Android Chrome 通常都支援)
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                        
                         navigator.share({
                             files: [file],
                             title: '物件明細表',
                             text: `${caseId} 物件明細表`
                         }).then(() => {
-                            console.log('分享/儲存成功');
                             resetButton();
                         }).catch((error) => {
-                            console.log('使用者取消分享', error);
                             resetButton();
                         });
-
                     } else {
-                        // 如果設備太舊或用電腦版，退回原本的「直接下載」模式
+                        // 如果不支援分享 (例如一般電腦)，直接下載
                         const imageURI = canvas.toDataURL('image/png');
                         const link = document.createElement('a');
                         link.download = fileName;
@@ -485,7 +512,6 @@
             });
         }, 150);
 
-        // 恢復按鈕狀態與隱藏表格的共用函數
         function resetButton() {
             exportArea.classList.remove('capturing');
             btn.innerText = originalText;
@@ -494,5 +520,6 @@
         }
     });
 </script>
+
 </body>
 </html>
